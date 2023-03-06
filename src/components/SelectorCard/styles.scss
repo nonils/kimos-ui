@@ -1,0 +1,11 @@
+.selector-card {
+  @apply border border-gray-300 rounded-md flex items-start p-4 transition duration-200 ease-in-out bg-blue-600 hover:bg-blue-800;
+
+  &--active {
+    @apply bg-blue-800;
+  }
+
+  &--error {
+    @apply border-red-600;
+  }
+}

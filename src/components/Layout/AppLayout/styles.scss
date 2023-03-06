@@ -1,0 +1,79 @@
+.app {
+  @apply relative h-full min-h-screen items-center overflow-y-hidden;
+
+  &__wrapper {
+    @apply container mx-auto p-3 min-h-0 flex-1 flex overflow-hidden;
+    height: calc(100% - 85px - 56px);
+  }
+}
+
+.Toastify {
+  &__toast-container {
+    z-index: 99999999;
+  }
+
+  &__toast {
+    @apply items-center p-5 shadow-sm;
+
+    &-body {
+      @apply m-0 p-0 text-sm;
+    }
+
+    &--success {
+      @apply bg-green-50 text-green-800;
+
+      .Toastify__close-button {
+        @apply text-green-500 p-2 bg-green-100;
+      }
+
+      .Toastify__toast-icon {
+        @apply text-green-400;
+      }
+    }
+
+    &--error {
+      @apply bg-red-50 text-red-800;
+
+      .Toastify__close-button {
+        @apply text-red-500 p-2 bg-red-100;
+      }
+
+      .Toastify__toast-icon {
+        @apply text-red-400;
+      }
+    }
+
+    &--warning {
+      @apply bg-yellow-50 text-yellow-800;
+
+      .Toastify__close-button {
+        @apply text-yellow-500 p-2 bg-yellow-100;
+      }
+
+      .Toastify__toast-icon {
+        @apply text-yellow-400;
+      }
+    }
+
+    &--info {
+      @apply bg-blue-50 text-blue-700;
+
+      .Toastify__close-button {
+        @apply text-blue-800 p-2 bg-blue-100;
+      }
+
+      .Toastify__toast-icon {
+        @apply text-blue-400;
+      }
+    }
+  }
+
+  &__close {
+    &-button {
+      @apply opacity-100 self-auto rounded-md;
+      svg {
+        transform: scale(1.25);
+      }
+    }
+  }
+}

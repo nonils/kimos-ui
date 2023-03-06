@@ -1,0 +1,33 @@
+.card {
+  @apply p-4 rounded-md shadow-sm overflow-hidden;
+
+  &__primary {
+    @apply bg-gray-100;
+  }
+
+  &__secondary {
+    @apply bg-white;
+  }
+
+  &__tertiary {
+    @apply bg-white border border-gray-200;
+  }
+
+  &--header {
+    @apply p-0;
+  }
+
+  &__title {
+    @apply font-medium;
+  }
+
+  &__header {
+    @apply bg-gray-100 px-4 py-3;
+  }
+
+  &__content {
+    &--active {
+      @apply p-4;
+    }
+  }
+}

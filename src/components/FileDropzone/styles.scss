@@ -1,0 +1,19 @@
+.dropzone {
+  @apply bg-white p-5 h-40 w-full flex items-center flex-col justify-center rounded-xl cursor-pointer space-y-2;
+
+  &--default {
+    @apply border-2;
+  }
+
+  &--error {
+    @apply border border-red-600;
+  }
+
+  &__text {
+    @apply text-gray-400;
+  }
+
+  &__accent {
+    @apply text-red-300 font-medium;
+  }
+}

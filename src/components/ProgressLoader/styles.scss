@@ -1,0 +1,39 @@
+.progress {
+  &__wrapper {
+    @apply h-1 w-full bg-gray-300 relative;
+    margin-top: 20px !important;
+  }
+
+  &__bar {
+    @apply absolute top-0 right-full bottom-0 left-0 w-0 bg-red-300;
+    animation: animationBar 1500ms cubic-bezier(0, 0, 1, 0.70) infinite;
+
+    @keyframes animationBar {
+      0% {
+        left: 0%;
+        right: 100%;
+        width: 0%;
+      }
+
+      10% {
+        left: 0%;
+        right: 75%;
+        width: 25%;
+      }
+
+      90% {
+        right: 0%;
+        left: 75%;
+        width: 25%;
+      }
+
+      100% {
+        left: 100%;
+        right: 0%;
+        width: 0%;
+      }
+    }
+  }
+}
+
+

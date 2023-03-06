@@ -1,0 +1,73 @@
+.slideover__wrapper {
+  @apply fixed inset-0 overflow-hidden;
+}
+
+.slideover {
+  @apply absolute inset-0 overflow-hidden;
+
+  &__overlay {
+    @apply absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity cursor-pointer;
+  }
+
+  &__body {
+    @apply fixed inset-y-0 right-0 max-w-full flex;
+  }
+
+  &__closer {
+    &__icon {
+      @apply h-6 w-6 text-blue-600;
+    }
+  }
+
+  &__header {
+    @apply flex-shrink-0 justify-between items-center p-4;
+  }
+
+  &__left {
+    @apply flex-1;
+  }
+
+  &__right {
+    @apply h-7 flex items-center;
+  }
+
+  &__closer {
+    @apply rounded-md text-gray-400 hover:text-gray-500 focus:outline-none;
+  }
+
+  &__title {
+    @apply text-base font-medium text-gray-500;
+  }
+
+  &__content {
+    @apply w-screen max-w-lg;
+  }
+
+  &__box {
+    @apply min-h-0 flex-1 overflow-y-auto;
+
+    &--padder {
+      @apply pb-6 px-4;
+    }
+  }
+
+  &__inner {
+    @apply min-w-0 flex-1 h-full flex flex-col overflow-hidden;
+
+    &--primary {
+      @apply bg-white;
+    }
+
+    &--secondary {
+      @apply bg-blue-600;
+
+      #modal-closer > svg {
+        @apply text-white;
+      }
+
+      .slideover__title {
+        @apply text-white;
+      }
+    }
+  }
+}

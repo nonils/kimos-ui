@@ -1,0 +1,19 @@
+.badge {
+  @apply inline-flex rounded-full items-center py-1.5 px-3 text-sm font-medium my-1;
+
+  &__primary {
+    @apply bg-blue-600 text-white;
+  }
+
+  &__secondary {
+    @apply bg-blue-100 text-blue-800;
+  }
+
+  &--clicker {
+    @apply pl-4;
+  }
+
+  &__button {
+    @apply flex-shrink-0 ml-0.5 h-4 w-4 rounded-full inline-flex items-center justify-center text-blue-400 hover:bg-blue-200 hover:text-blue-500 focus:outline-none focus:bg-blue-500 focus:text-white;
+  }
+}

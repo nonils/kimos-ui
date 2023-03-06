@@ -1,0 +1,52 @@
+.dropdown {
+  @apply relative inline-block text-left;
+
+  &__button {
+    @apply
+    flex
+    items-center
+    justify-center
+    w-full border
+    border-gray-200
+    px-2
+    py-1
+    bg-white
+    text-sm
+    font-medium
+    text-gray-700
+    hover:bg-gray-50
+    focus:outline-none
+    focus:ring-1
+    focus:ring-offset-gray-100
+    focus:ring-blue-500;
+  }
+
+  &__items {
+    @apply
+    origin-top-right
+    absolute
+    right-0
+    mt-2
+    w-auto
+    rounded-md
+    shadow-lg
+    bg-white
+    ring-1
+    ring-black
+    ring-opacity-5
+    focus:outline-none
+    z-10;
+  }
+
+  &__inner {
+    @apply p-2;
+  }
+
+  &__item {
+    @apply flex py-2 hover:bg-gray-100 px-2 cursor-pointer;
+  }
+
+  &__icon {
+    @apply -mr-1 ml-2 h-5 w-5;
+  }
+}

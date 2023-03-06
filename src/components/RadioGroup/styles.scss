@@ -1,0 +1,39 @@
+.area-selector {
+  @apply mt-6 border-gray-200 divide-y divide-gray-200;
+
+  &--loading {
+    @apply opacity-50;
+  }
+
+  &__card {
+    @apply w-full cursor-pointer;
+  }
+
+  &__button {
+    @apply w-full flex items-center;
+  }
+
+  &__radio {
+    @apply focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300
+  }
+
+  &__inner {
+    @apply relative group py-4 flex items-center;
+  }
+
+  &__left {
+    @apply flex-1;
+  }
+
+  &__right {
+    @apply flex-shrink-0 self-center;
+  }
+
+  &__icon {
+    @apply h-6 w-6 text-blue-600;
+  }
+
+  &__label {
+    @apply flex items-center cursor-pointer;
+  }
+}

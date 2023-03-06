@@ -1,0 +1,30 @@
+.tags {
+  @apply shadow-sm rounded-md border-gray-300 h-full w-full;
+
+  &__error {
+    > div.react-tag-input {
+      @apply border-red-400;
+    }
+  }
+
+  .react-tag-input {
+    @apply shadow-sm focus:ring-blue-500 focus:border-blue-500 text-sm border-gray-300 rounded-md min-h-0 h-full;
+    padding-top: 2px;
+    padding-bottom: 2px;
+
+    &__tag__content {
+      @apply text-sm text-gray-900 py-1 pr-5 bg-gray-100 rounded;
+    }
+
+    &__tag__remove {
+      @apply rounded-full bg-gray-700 text-white absolute;
+      width: 14px;
+      height: 14px;
+      right: 3px;
+
+      &::before, &::after {
+        @apply bg-white;
+      }
+    }
+  }
+}

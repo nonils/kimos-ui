@@ -1,0 +1,33 @@
+.button {
+  @apply inline-flex items-center justify-center px-4 border border-transparent shadow-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 text-sm transition duration-150 ease-in-out rounded-md;
+  height: 40px;
+
+  &__primary {
+    @apply bg-red-400 hover:bg-red-500;
+  }
+
+  &__secondary {
+    @apply bg-white border-red-500 text-red-500 hover:bg-red-400 hover:text-white;
+  }
+
+  &__tertiary {
+    @apply bg-white border border-gray-200 text-blue-600 hover:bg-gray-50 hover:border-gray-100 ;
+  }
+
+  &__quaternary {
+    @apply bg-white shadow-none text-blue-600;
+  }
+
+  &__quinary {
+    @apply bg-gray-700 shadow-none text-white hover:bg-gray-800;
+  }
+
+  &__sextary {
+    @apply bg-white border border-gray-200 text-gray-500 hover:bg-gray-50 hover:border-gray-100 ;
+  }
+
+  &:focus {
+    @apply shadow-none ring-0 ring-white;
+    outline: none;
+  }
+}

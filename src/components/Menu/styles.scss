@@ -1,0 +1,40 @@
+.menu {
+  @apply bg-white shadow-sm border-t border-gray-100 flex items-center border-b;
+  height: 85px;
+
+  &__searcher {
+    @apply relative max-w-sm w-full;
+    &__icon {
+      @apply absolute w-full h-10 cursor-pointer z-10;
+    }
+  }
+
+  &__items {
+    @apply p-0 m-0 list-none;
+  }
+
+  &__item {
+    @apply relative flex px-3 py-3 items-center hover:bg-gray-100 rounded-md;
+
+    &--active {
+      @apply text-blue-600;
+
+      &::after {
+        content: "";
+        @apply absolute bottom-0 left-2/4 transform -translate-x-1/2 bg-blue-600;
+        height: 2px;
+        width: 80%;
+      }
+    }
+
+    &__loader {
+      display: block !important;
+      @apply mx-auto;
+    }
+
+  }
+
+  &__text {
+    line-height: 0.85rem;
+  }
+}

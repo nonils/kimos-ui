@@ -1,0 +1,11 @@
+.sidebar {
+  @apply max-w-sidebar w-full relative overflow-y-hidden h-full flex flex-col;
+
+  &__primary {
+    @apply bg-gray-200;
+  }
+
+  &__secondary {
+    @apply bg-blue-600;
+  }
+}

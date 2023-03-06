@@ -1,0 +1,91 @@
+.alert {
+  @apply rounded-md p-4 flex;
+
+  svg {
+    @apply w-5 h-5;
+  }
+
+  &__closer {
+    @apply inline-flex rounded-md p-1.5 focus:outline-none;
+  }
+
+  &--success {
+    @apply bg-green-50;
+
+    h3 {
+      @apply text-green-700;
+    }
+
+    svg {
+      @apply text-green-400;
+    }
+
+    .alert__closer {
+      @apply bg-green-100;
+    }
+  }
+
+  &--danger {
+    @apply bg-red-50;
+
+    h3 {
+      @apply text-red-700;
+    }
+
+    svg {
+      @apply text-red-400;
+    }
+
+    .alert__closer {
+      @apply bg-red-100;
+    }
+  }
+
+  &--warning {
+    @apply bg-yellow-50;
+
+    h3 {
+      @apply text-yellow-700;
+    }
+
+    svg {
+      @apply text-yellow-400;
+    }
+
+    .alert__closer {
+      @apply bg-yellow-100;
+    }
+  }
+
+  &--info {
+    @apply bg-blue-50;
+
+    h3 {
+      @apply text-blue-700;
+    }
+
+    svg {
+      @apply text-blue-400;
+    }
+
+    .alert__closer {
+      @apply bg-blue-100;
+    }
+  }
+
+  &__icon {
+    @apply h-5 w-5;
+  }
+
+  &__left {
+    @apply flex-shrink-0;
+  }
+
+  &__right {
+    @apply ml-3;
+  }
+
+  &__message {
+    @apply text-sm font-medium;
+  }
+}

@@ -1,0 +1,15 @@
+.breadcrumb {
+  @apply flex;
+
+  &__list {
+    @apply flex items-center space-x-1;
+  }
+
+  &__text {
+    @apply font-medium hover:text-gray-700;
+  }
+
+  &__button {
+    @apply flex items-center;
+  }
+}
