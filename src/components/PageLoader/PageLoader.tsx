@@ -1,10 +1,13 @@
 import React from 'react';
+import { Spinner } from '../Spinner/Spinner';
+import colors from 'tailwindcss/colors';
 
 const PageLoader: React.FC = () => {
-  const loadingImg = 'https://cdn.auth0.com/blog/hello-auth0/loader.svg';
   return (
-    <div className="loader">
-      <img src={loadingImg} alt="Loading..." />
+    <div className="grid place-content-center min-h-screen">
+      <div className="py-12">
+        <Spinner type="TailSpin" height={100} width={100} color={colors.gray[600]} />
+      </div>
     </div>
   );
 };

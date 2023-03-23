@@ -14,6 +14,7 @@ import { AuthenticationGuard } from './components';
 import { ProfilePage } from './pages/app/ProfilePage';
 import { HomePage } from './pages/HomePage';
 import { Auth0ProviderWithNavigate } from './auth0-provider-with-navigate';
+import { DashboardPage } from './pages/app/DashboardPage';
 // @ts-ignore
 const root = createRoot(document.getElementById('root') as HTMLElement);
 const locale = navigator.language;
@@ -32,6 +33,10 @@ root.render(
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/profile" element={<AuthenticationGuard component={ProfilePage} />} />
+              <Route
+                path="/dashboard"
+                element={<AuthenticationGuard component={DashboardPage} />}
+              />
             </Routes>
           </Auth0ProviderWithNavigate>
         </BrowserRouter>

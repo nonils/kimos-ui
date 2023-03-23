@@ -1,18 +1,12 @@
 import React, { Fragment, useState } from 'react';
 import './styles.scss';
-import { Dialog, Menu, Transition } from '@headlessui/react';
+import { Dialog, Transition } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { CloseButtonProps, ToastContainer } from 'react-toastify';
-
-function classNames(...classes: any) {
-  return classes.filter(Boolean).join(' ');
-}
-
-const userNavigation = [
-  { name: 'Your Profile', href: '/app/settings/my-profile' },
-  { name: 'Settings', href: '/app/settings' },
-  { name: 'Sign out', href: '/sign-out' },
-];
+import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
+import { useAuth0 } from '@auth0/auth0-react';
+import { ProfileDropdown } from '../../ProfileDropdown/ProfileDropdown';
+import { Navigation } from '../../Navigation/Navigation';
 
 const CloseButton = ({ closeToast }: Partial<CloseButtonProps>) => {
   return (
@@ -23,13 +17,26 @@ const CloseButton = ({ closeToast }: Partial<CloseButtonProps>) => {
 };
 type AppLayoutProps = {
   title: string;
+  searchPlaceholder?: string;
+  showSearchInput: boolean;
+  showNavigation?: boolean;
+  setSearchValue?: (value: string) => void;
+  searchValue?: string;
   children: React.ReactElement | React.ReactElement[];
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const AppLayout: React.FC<AppLayoutProps> = ({ title, children }: AppLayoutProps) => {
+const AppLayout: React.FC<AppLayoutProps> = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  title,
+  searchPlaceholder,
+  children,
+  showSearchInput,
+  showNavigation = true,
+  setSearchValue,
+  searchValue,
+}: AppLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
+  const authenticated = useAuth0().isAuthenticated;
   return (
     <>
       <div className="h-full">
@@ -91,18 +98,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ title, children }: AppLayoutProps
           </Dialog>
         </Transition.Root>
 
-        {/* Static sidebar for desktop */}
-        <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
-          {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex flex-col flex-grow pt-5 bg-gray-500 overflow-y-auto">
-            <div className="flex items-center flex-shrink-0 px-4">
-              <img className="h-8 w-auto" src="/header-logo.png" alt="Chepido" />
-            </div>
-            <div className="mt-5 flex-1 flex flex-col">
-              <nav className="flex-1 px-2 pb-4 space-y-1"></nav>
-            </div>
-          </div>
-        </div>
+        <Navigation showNavigation={showNavigation} />
         <div className="z-20 md:pl-64 flex flex-col flex-1">
           <div className="sticky top-0 z-10 flex-shrink-0 flex h-16 bg-white shadow">
             <button
@@ -113,6 +109,34 @@ const AppLayout: React.FC<AppLayoutProps> = ({ title, children }: AppLayoutProps
               <span className="sr-only">Open sidebar</span>
               <Bars3Icon className="h-6 w-6" aria-hidden="true" />
             </button>
+            {/* Search bar */}
+            {showSearchInput && (
+              <div className="flex flex-1 justify-between px-4 sm:px-6 lg:mx-auto lg:max-w-6xl lg:px-8">
+                <div className="flex flex-1">
+                  <label htmlFor="search-field" className="sr-only">
+                    Search
+                  </label>
+                  <div className="relative w-full text-gray-400 focus-within:text-gray-600">
+                    <div
+                      className="pointer-events-none absolute inset-y-0 left-0 flex items-center"
+                      aria-hidden="true"
+                      onClick={() => console.log('search')}
+                    >
+                      <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true" />
+                    </div>
+                    <input
+                      id="search-field"
+                      value={searchValue}
+                      onChange={(e) => (setSearchValue ? setSearchValue(e.target.value) : null)}
+                      name="search-field"
+                      className="block h-full w-full border-transparent py-2 pl-8 pr-3 text-gray-900 focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
+                      placeholder={searchPlaceholder ? searchPlaceholder : 'Search'}
+                      type="search"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
             <div className="flex-1 px-4 flex justify-between">
               <div className="flex-1 flex"></div>
               <div className="ml-4 flex items-center md:ml-6">
@@ -123,47 +147,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ title, children }: AppLayoutProps
                   <span className="sr-only">View notifications</span>
                   <BellIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
-                {/* Profile dropdown */}
-                <Menu as="div" className="ml-3 relative">
-                  <div>
-                    <Menu.Button className="max-w-xs bg-white flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300">
-                      <span className="sr-only">Open user menu</span>
-                      <img
-                        className="h-8 w-8 rounded-full"
-                        src={'/user.png'}
-                        referrerPolicy="no-referrer"
-                        alt=""
-                      />
-                    </Menu.Button>
-                  </div>
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                  >
-                    <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      {userNavigation.map((item) => (
-                        <Menu.Item key={item.name}>
-                          {({ active }) => (
-                            <a
-                              href={item.href}
-                              className={classNames(
-                                active ? 'bg-gray-100' : '',
-                                'block px-4 py-2 text-sm text-gray-700',
-                              )}
-                            >
-                              {item.name}
-                            </a>
-                          )}
-                        </Menu.Item>
-                      ))}
-                    </Menu.Items>
-                  </Transition>
-                </Menu>
+                <ProfileDropdown isAuthenticated={authenticated} />
               </div>
             </div>
           </div>

@@ -7,7 +7,7 @@ const LoginButton: React.FC = () => {
   const handleLogin = async () => {
     await loginWithRedirect({
       appState: {
-        returnTo: '/profile',
+        returnTo: '/dashboard',
       },
       authorizationParams: {
         prompt: 'login',
@@ -16,9 +16,13 @@ const LoginButton: React.FC = () => {
   };
 
   return (
-    <button className="button__login" onClick={handleLogin}>
-      Log In
-    </button>
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+    <div onClick={handleLogin} className="hidden lg:flex lg:flex-1 lg:justify-end">
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+        Log in <span aria-hidden="true">&rarr;</span>
+      </a>
+    </div>
   );
 };
 
