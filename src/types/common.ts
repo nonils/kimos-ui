@@ -7,6 +7,27 @@ export type IconConfigProps = {
   className?: string;
 };
 
+export type IActivityItem = {
+  id: string;
+  project: string;
+  commit: string;
+  environment: string;
+  time: string;
+};
+
+export type IProject = {
+  name: string;
+  href: string;
+  siteHref: string;
+  repoHref: string;
+  repo: string;
+  tech: string;
+  lastDeploy: string;
+  location: string;
+  starred: boolean;
+  active: boolean;
+};
+
 export interface IMultiSelectValues {
   label: string;
   value: string;

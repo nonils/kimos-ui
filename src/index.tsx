@@ -15,7 +15,7 @@ import { ProfilePage } from './pages/app/ProfilePage';
 import { HomePage } from './pages/HomePage';
 import { Auth0ProviderWithNavigate } from './auth0-provider-with-navigate';
 import { DashboardPage } from './pages/app/DashboardPage';
-import { SettingsPage } from './pages/app/Profile/SettingsPage';
+import { BillingPage } from './pages/app/Profile/BillingPage';
 // @ts-ignore
 const root = createRoot(document.getElementById('root') as HTMLElement);
 const locale = navigator.language;
@@ -34,7 +34,11 @@ root.render(
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/profile" element={<AuthenticationGuard component={ProfilePage} />} />
-              <Route path="/settings" element={<AuthenticationGuard component={SettingsPage} />} />
+              <Route
+                path="/settings/billing"
+                element={<AuthenticationGuard component={BillingPage} />}
+              />
+              {/*Agregar redirect para settings*/}
               <Route
                 path="/dashboard"
                 element={<AuthenticationGuard component={DashboardPage} />}
