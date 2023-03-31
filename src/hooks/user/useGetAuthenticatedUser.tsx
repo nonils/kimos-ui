@@ -5,7 +5,6 @@ import axios from 'axios';
 import { BASE_API_URL } from '../../config/constants';
 
 function useGetAuthenticatedUser() {
-  console.info('useGetAuthenticatedUser');
   const { getIdTokenClaims } = useAuth0();
   const [user, setUser] = useState<IAccount>();
   useEffect(() => {
@@ -20,7 +19,6 @@ function useGetAuthenticatedUser() {
           },
         })
         .then((res) => {
-          console.log(JSON.stringify(res.data));
           setUser(res.data);
         })
         .catch((err) => {
@@ -28,8 +26,7 @@ function useGetAuthenticatedUser() {
         });
     };
     getUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getIdTokenClaims]);
   return user;
 }
 
