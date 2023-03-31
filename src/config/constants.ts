@@ -54,3 +54,6 @@ export const combinators = [
   { name: 'and', label: 'AND' },
   { name: 'or', label: 'OR' },
 ];
+
+// eslint-disable-next-line no-undef
+export const BASE_API_URL = process.env.REACT_APP_BASE_API_URL || 'http://localhost:10101/api/v1';

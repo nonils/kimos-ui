@@ -1,9 +1,11 @@
 import { Menu, Transition } from '@headlessui/react';
 import React, { Fragment } from 'react';
 import { LoginButton } from '../Buttons';
+import { IAccount } from '../../types';
 
 type ProfileDropdownProps = {
   isAuthenticated: boolean;
+  user?: IAccount;
 };
 
 function classNames(...classes: any) {
@@ -16,7 +18,7 @@ const userNavigation = [
   { name: 'Sign out', href: '/sign-out' },
 ];
 
-const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ isAuthenticated }) => {
+const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ isAuthenticated, user }) => {
   if (isAuthenticated) {
     return (
       <Menu as="div" className="ml-3 relative">
@@ -25,7 +27,7 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ isAuthenticated }) =>
             <span className="sr-only">Open user menu</span>
             <img
               className="h-8 w-8 rounded-full"
-              src={'/user.png'}
+              src={user?.imageUrl || '/user.png'}
               referrerPolicy="no-referrer"
               alt=""
             />

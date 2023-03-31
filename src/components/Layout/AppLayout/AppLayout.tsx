@@ -7,6 +7,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import { useAuth0 } from '@auth0/auth0-react';
 import { ProfileDropdown } from '../../ProfileDropdown/ProfileDropdown';
 import { Navigation } from '../../Navigation/Navigation';
+import { useGetAuthenticatedUser } from '../../../hooks/user/useGetAuthenticatedUser';
 
 const CloseButton = ({ closeToast }: Partial<CloseButtonProps>) => {
   return (
@@ -37,6 +38,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
 }: AppLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const authenticated = useAuth0().isAuthenticated;
+  const user = useGetAuthenticatedUser();
   return (
     <>
       <div className="h-full">
@@ -147,7 +149,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                   <span className="sr-only">View notifications</span>
                   <BellIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
-                <ProfileDropdown isAuthenticated={authenticated} />
+                <ProfileDropdown isAuthenticated={authenticated} user={user} />
               </div>
             </div>
           </div>
