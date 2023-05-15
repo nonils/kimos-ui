@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { AppLayout } from '../../components';
+import { SettingsLayout } from '../../components';
 
 const ProfilePage: React.FC<any> = () => {
   const { getAccessTokenSilently } = useAuth0();
@@ -24,8 +24,8 @@ const ProfilePage: React.FC<any> = () => {
   }, [getAccessTokenSilently]);
 
   return (
-    <AppLayout title={'Hola'} showSearchInput={false}>
-      <div className="flex-1 xl:overflow-y-auto">
+    <SettingsLayout>
+      <div className="space-y-6 sm:px-6 lg:col-span-9 lg:px-0">
         <div className="mx-auto max-w-3xl py-10 px-4 sm:px-6 lg:py-12 lg:px-8">
           <h1 className="text-3xl font-bold tracking-tight text-blue-gray-900">Account</h1>
 
@@ -248,7 +248,7 @@ const ProfilePage: React.FC<any> = () => {
           </form>
         </div>
       </div>
-    </AppLayout>
+    </SettingsLayout>
   );
 };
 

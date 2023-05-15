@@ -23,6 +23,7 @@ type AppLayoutProps = {
   showNavigation?: boolean;
   setSearchValue?: (value: string) => void;
   searchValue?: string;
+  searchAction?: () => void;
   children: React.ReactElement | React.ReactElement[];
 };
 
@@ -35,6 +36,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
   showNavigation = true,
   setSearchValue,
   searchValue,
+  searchAction,
 }: AppLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const authenticated = useAuth0().isAuthenticated;
@@ -114,7 +116,15 @@ const AppLayout: React.FC<AppLayoutProps> = ({
             {/* Search bar */}
             {showSearchInput && (
               <div className="flex flex-1 justify-between px-4 sm:px-6 lg:mx-auto lg:max-w-6xl lg:px-8">
-                <div className="flex flex-1">
+                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+                <div
+                  className="flex flex-1"
+                  onClick={() => {
+                    if (searchAction) {
+                      searchAction();
+                    }
+                  }}
+                >
                   <label htmlFor="search-field" className="sr-only">
                     Search
                   </label>
@@ -122,14 +132,22 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                     <div
                       className="pointer-events-none absolute inset-y-0 left-0 flex items-center"
                       aria-hidden="true"
-                      onClick={() => console.log('search')}
                     >
-                      <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true" />
+                      <MagnifyingGlassIcon
+                        className="h-5 w-5"
+                        aria-hidden="true"
+                        onClick={searchAction}
+                      />
                     </div>
                     <input
                       id="search-field"
                       value={searchValue}
                       onChange={(e) => (setSearchValue ? setSearchValue(e.target.value) : null)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && searchAction) {
+                          searchAction();
+                        }
+                      }}
                       name="search-field"
                       className="block h-full w-full border-transparent py-2 pl-8 pr-3 text-gray-900 focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
                       placeholder={searchPlaceholder ? searchPlaceholder : 'Search'}
