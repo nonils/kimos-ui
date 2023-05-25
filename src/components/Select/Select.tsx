@@ -41,7 +41,7 @@ const SelectComponent: React.FC<Props> = ({
   return (
     <div className={selectOption} data-testid="select-wrapper">
       {label && (
-        <label htmlFor={id} className="select__label">
+        <label htmlFor={id} className="input__label">
           {label}
         </label>
       )}

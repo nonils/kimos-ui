@@ -16,4 +16,5 @@ export interface ITemplate {
   id: string;
   name: string;
   url: string;
+  templateImageUrl: string;
 }

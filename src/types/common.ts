@@ -30,6 +30,15 @@ export type IconConfigProps = {
   className?: string;
 };
 
+export type IStep = {
+  id: string;
+  name: string;
+  complete: boolean;
+  active: boolean;
+  child?: JSX.Element;
+  onClickAction: () => void;
+};
+
 export type IActivityItem = {
   id: string;
   project: string;
