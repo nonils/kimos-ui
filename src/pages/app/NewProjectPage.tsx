@@ -5,34 +5,36 @@ import { ICICDProvider, ICodeSystemVersionControl, IStep, ITemplate } from '../.
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Step } from '../../components/Step/Step';
-import { getAllTemplates } from '../../api';
+import { getAllCICDProviders, getAllCodeVersionProviders, getAllTemplates } from '../../api';
 
 const NewProjectPage: React.FC<any> = () => {
   const { getAccessTokenSilently } = useAuth0();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = React.useState<boolean>(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [CICDProviders, setCICDProviders] = React.useState<ICICDProvider[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [templates, setTemplates] = React.useState<ITemplate[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [codeSystemsVersionControl, setCodeSystemsVersionControl] = React.useState<
     ICodeSystemVersionControl[]
   >([]);
   const [searchTextTemplate, setSearchTextTemplate] = React.useState<string>('');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [page, setPage] = React.useState<number>(0);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [size, setSize] = React.useState<number>(10);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [selectedTemplate, setSelectedTemplate] = React.useState<ITemplate | null>(null);
   const getAllTemplatesCallback = async (data: any) => {
-    // eslint-disable-next-line no-debugger
-    debugger;
     setTemplates(data.data);
   };
+  const getAllCIProvidersCallback = async (data: any) => {
+    setCICDProviders(data);
+  };
+
+  const getAllCodeVersionProvidersCallback = async (data: any) => {
+    setCodeSystemsVersionControl(data);
+  };
+
   useEffect(() => {
     getAllTemplates({ callback: getAllTemplatesCallback });
+    getAllCICDProviders(getAllCIProvidersCallback);
+    getAllCodeVersionProviders(getAllCodeVersionProvidersCallback);
   }, []);
 
   const handleSelectedTemplate = (template: ITemplate) => {
@@ -44,7 +46,17 @@ const NewProjectPage: React.FC<any> = () => {
     setCurrentStep(steps[1]);
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    console.log(selectedTemplate);
+  };
+
+  useEffect(() => {
+    const timeOutId = setTimeout(
+      () => getAllTemplates({ callback: getAllTemplatesCallback, search: searchTextTemplate }),
+      500,
+    );
+    return () => clearTimeout(timeOutId);
+  }, [searchTextTemplate]);
 
   const handleCancel = () => {};
 
@@ -104,12 +116,32 @@ const NewProjectPage: React.FC<any> = () => {
     },
   ]);
 
+  const handleChangeStep = (selectedStepId: string) => {
+    setSteps(
+      steps.map((step) => {
+        if (step.id === currentStep.id) {
+          return { ...step, active: false };
+        }
+        if (step.id === selectedStepId) {
+          setCurrentStep(step);
+          return { ...step, active: true };
+        }
+        return step;
+      }),
+    );
+  };
+
   const [currentStep, setCurrentStep] = React.useState<IStep>(steps[0]);
   return (
     <AppLayout showSearchInput={false} title={'New Project'}>
       <div className="space-y-6 sm:px-6 lg:col-span-9 lg:px-0">
         <div className="mx-auto max-w-3xl py-10 px-4 sm:px-6 lg:py-12 lg:px-8">
-          <Step steps={steps} currentStepObject={currentStep} currentStep={currentStep.id} />
+          <Step
+            steps={steps}
+            currentStepObject={currentStep}
+            currentStep={currentStep.id}
+            handleChangeStep={handleChangeStep}
+          />
           <div className="mt-10">
             {currentStep.id === '1' && (
               <SelectTemplateForm

@@ -37,10 +37,7 @@ const SelectTemplateForm: React.FC<SelectTemplateFormProps> = ({
   const { values, handleSubmit, errors, handleChange } = formik;
 
   const handleChangeSearch = (e: any) => {
-    // eslint-disable-next-line no-debugger
-    debugger;
     setSearch(e.target.value);
-    console.log(e);
   };
 
   const handleSelectTemplate = (template: ITemplate) => {

@@ -7,3 +7,14 @@ export const getAllTemplates = ({ callback, search = '', page = 0, size = 10 }) 
     callback(response.data);
   });
 };
+
+export const getAllCICDProviders = (callback: (data: any) => void) => {
+  axios.get(`${BASE_API_URL}/cicd-providers`).then((response) => {
+    callback(response.data);
+  });
+};
+export const getAllCodeVersionProviders = (callback: (data: any) => void) => {
+  axios.get(`${BASE_API_URL}/code-version-providers`).then((response) => {
+    callback(response.data);
+  });
+};

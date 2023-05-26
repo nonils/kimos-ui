@@ -6,6 +6,7 @@ type StepProps = {
   steps: IStep[];
   currentStep: string;
   currentStepObject?: IStep;
+  handleChangeStep: (selectedStepId: string) => void;
 };
 
 const Step: React.FC<StepProps> = ({
@@ -14,7 +15,11 @@ const Step: React.FC<StepProps> = ({
   currentStep,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   currentStepObject,
+  handleChangeStep,
 }) => {
+  const handleOnClick = (stepId: string) => {
+    handleChangeStep(stepId);
+  };
   return (
     <nav aria-label="Progress">
       {/* eslint-disable-next-line jsx-a11y/no-redundant-roles */}
@@ -26,7 +31,7 @@ const Step: React.FC<StepProps> = ({
           <li key={step.name} className="relative md:flex md:flex-1">
             {step.complete ? (
               // eslint-disable-next-line jsx-a11y/anchor-is-valid,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
-              <a onClick={step.onClickAction} className="group flex w-full items-center">
+              <a onClick={() => handleOnClick(step.id)} className="group flex w-full items-center">
                 <span className="flex items-center px-6 py-4 text-sm font-medium">
                   <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-indigo-600 group-hover:bg-indigo-800">
                     <CheckIcon className="h-6 w-6 text-white" aria-hidden="true" />
@@ -37,7 +42,7 @@ const Step: React.FC<StepProps> = ({
             ) : step.active ? (
               // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/anchor-is-valid,jsx-a11y/no-static-element-interactions
               <a
-                onClick={step.onClickAction}
+                onClick={() => handleOnClick(step.id)}
                 className="flex items-center px-6 py-4 text-sm font-medium"
                 aria-current="step"
               >
