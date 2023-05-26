@@ -24,6 +24,8 @@ const NewProjectPage: React.FC<any> = () => {
   const [page, setPage] = React.useState<number>(0);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [size, setSize] = React.useState<number>(10);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [selectedTemplate, setSelectedTemplate] = React.useState<ITemplate | null>(null);
   const getAllTemplatesCallback = async (data: any) => {
     // eslint-disable-next-line no-debugger
     debugger;
@@ -32,6 +34,15 @@ const NewProjectPage: React.FC<any> = () => {
   useEffect(() => {
     getAllTemplates({ callback: getAllTemplatesCallback });
   }, []);
+
+  const handleSelectedTemplate = (template: ITemplate) => {
+    setSelectedTemplate(template);
+    const updatedSteps = [...steps];
+    updatedSteps[0] = { ...updatedSteps[0], active: false, complete: true };
+    updatedSteps[1] = { ...updatedSteps[1], active: true, complete: false };
+    setSteps(updatedSteps);
+    setCurrentStep(steps[1]);
+  };
 
   const handleSubmit = () => {};
 
@@ -71,7 +82,8 @@ const NewProjectPage: React.FC<any> = () => {
       name: Yup.string().required('The name is required'),
     }),
   });
-  const steps: IStep[] = [
+
+  const [steps, setSteps] = React.useState<IStep[]>([
     {
       id: '1',
       name: 'Select template',
@@ -89,18 +101,9 @@ const NewProjectPage: React.FC<any> = () => {
       onClickAction: () => {
         console.log('click');
       },
-      child: (
-        <CreateProjectForm
-          action={handleSubmit}
-          cancelAction={handleCancel}
-          formik={formik}
-          loading={loading}
-          title={'New Project'}
-        />
-      ),
     },
-  ];
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  ]);
+
   const [currentStep, setCurrentStep] = React.useState<IStep>(steps[0]);
   return (
     <AppLayout showSearchInput={false} title={'New Project'}>
@@ -108,19 +111,29 @@ const NewProjectPage: React.FC<any> = () => {
         <div className="mx-auto max-w-3xl py-10 px-4 sm:px-6 lg:py-12 lg:px-8">
           <Step steps={steps} currentStepObject={currentStep} currentStep={currentStep.id} />
           <div className="mt-10">
-            {steps[0].active && (
+            {currentStep.id === '1' && (
               <SelectTemplateForm
+                setSelectedTemplate={handleSelectedTemplate}
                 CICDProviders={CICDProviders}
                 search={searchTextTemplate}
                 setSearch={setSearchTextTemplate}
                 codeSystemsVersionControl={codeSystemsVersionControl}
-                action={handleSubmit}
+                action={steps[0].onClickAction}
                 cancelAction={handleCancel}
                 formik={formik}
                 loading={loading}
                 searchText={searchTextTemplate}
                 title={'New Project'}
                 templates={templates}
+              />
+            )}
+            {currentStep.id === '2' && (
+              <CreateProjectForm
+                action={handleSubmit}
+                cancelAction={handleCancel}
+                formik={formik}
+                loading={loading}
+                title={'New Project'}
               />
             )}
           </div>

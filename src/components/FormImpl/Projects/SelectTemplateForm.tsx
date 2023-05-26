@@ -10,6 +10,7 @@ type SelectTemplateFormProps = {
   cancelAction: () => void;
   codeSystemsVersionControl: ICodeSystemVersionControl[];
   search: string;
+  setSelectedTemplate: (template: ITemplate) => void;
   setSearch: (value: string) => void;
   formik: any;
   loading: boolean;
@@ -28,6 +29,7 @@ const SelectTemplateForm: React.FC<SelectTemplateFormProps> = ({
   codeSystemsVersionControl,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   cancelAction,
+  setSelectedTemplate,
   templates,
   loading,
 }) => {
@@ -39,6 +41,10 @@ const SelectTemplateForm: React.FC<SelectTemplateFormProps> = ({
     debugger;
     setSearch(e.target.value);
     console.log(e);
+  };
+
+  const handleSelectTemplate = (template: ITemplate) => {
+    setSelectedTemplate(template);
   };
 
   return (
@@ -100,7 +106,7 @@ const SelectTemplateForm: React.FC<SelectTemplateFormProps> = ({
                     key={template.id}
                     className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow"
                   >
-                    <TemplateCard template={template} />
+                    <TemplateCard template={template} action={handleSelectTemplate} />
                   </li>
                 ))}
               </ul>
