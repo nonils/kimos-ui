@@ -1,7 +1,13 @@
 import { Form, InputText, TemplateCard } from 'components';
 import { Stack } from 'components/Stack/Stack';
 import React from 'react';
-import { ICICDProvider, ICodeSystemVersionControl, ITemplate } from '../../../types';
+import {
+  ICICDProvider,
+  ICloudProvider,
+  ICodeSystemVersionControl,
+  ISelectOption,
+  ITemplate,
+} from '../../../types';
 import { Select } from '../../Select/Select';
 
 type SelectTemplateFormProps = {
@@ -9,33 +15,41 @@ type SelectTemplateFormProps = {
   action: () => void;
   cancelAction: () => void;
   codeSystemsVersionControl: ICodeSystemVersionControl[];
-  search: string;
+  cloudProviders: ICloudProvider[];
   setSelectedTemplate: (template: ITemplate) => void;
+  search: string;
   setSearch: (value: string) => void;
-  formik: any;
   loading: boolean;
-  searchText: string;
   showTitle?: boolean;
   templates: ITemplate[];
   title?: string;
+  cloudProvider: ISelectOption | undefined;
+  setCloudProvider: (value: ISelectOption) => void;
+  cicdProvider: ISelectOption | undefined;
+  setCICDProvider: (value: ISelectOption) => void;
+  codeVersionManagerProvider: ISelectOption | undefined;
+  setCodeVersionManagerProvider: (value: ISelectOption) => void;
 };
 
 const SelectTemplateForm: React.FC<SelectTemplateFormProps> = ({
   action,
   search,
   setSearch,
+  cloudProvider,
+  setCloudProvider,
+  cicdProvider,
+  setCICDProvider,
+  codeVersionManagerProvider,
+  setCodeVersionManagerProvider,
   CICDProviders,
-  formik,
   codeSystemsVersionControl,
+  cloudProviders,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   cancelAction,
   setSelectedTemplate,
   templates,
   loading,
 }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { values, handleSubmit, errors, handleChange } = formik;
-
   const handleChangeSearch = (e: any) => {
     setSearch(e.target.value);
   };
@@ -50,8 +64,8 @@ const SelectTemplateForm: React.FC<SelectTemplateFormProps> = ({
         <Form id="create-app-form" onSubmit={action} loading={loading}>
           <Stack direction="vertical" space="4">
             <Stack direction="horizontal" space="4">
-              <div className="px-4 py-6 sm:grid sm:grid-cols-12 sm:gap-4 sm:px-0">
-                <div className="sm:col-span-6">
+              <div className="w-full mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                <div className="sm:col-span-12">
                   <InputText
                     id={'search'}
                     name={'search'}
@@ -62,7 +76,7 @@ const SelectTemplateForm: React.FC<SelectTemplateFormProps> = ({
                     disabled={loading}
                   />
                 </div>
-                <div className="sm:col-span-3">
+                <div className="sm:col-span-4">
                   <Select
                     id={'cicdProvider'}
                     name={'cicdProvider'}
@@ -72,13 +86,29 @@ const SelectTemplateForm: React.FC<SelectTemplateFormProps> = ({
                       value: cicdProvider.id,
                       label: cicdProvider.name,
                     }))}
-                    value={values.cicdProvider}
+                    value={cicdProvider}
                     onChange={(value: any) =>
-                      handleChange({ target: { name: 'cicdProvider', value } })
+                      setCICDProvider({ value: value.value, label: value.label })
                     }
                   />
                 </div>
-                <div className="sm:col-span-3">
+                <div className="sm:col-span-4">
+                  <Select
+                    id={'cloudProvider'}
+                    name={'cloudProvider'}
+                    label={'Cloud Provider'}
+                    isMulti={false}
+                    options={cloudProviders.map((cloudProvider) => ({
+                      value: cloudProvider.id,
+                      label: cloudProvider.name,
+                    }))}
+                    value={cloudProvider}
+                    onChange={(value: any) =>
+                      setCloudProvider({ value: value.value, label: value.label })
+                    }
+                  />
+                </div>
+                <div className="sm:col-span-4">
                   <Select
                     id={'codeSystemsVersionControl'}
                     name={'codeSystemsVersionControl'}
@@ -88,9 +118,9 @@ const SelectTemplateForm: React.FC<SelectTemplateFormProps> = ({
                       value: codeSystemVersionControl.id,
                       label: codeSystemVersionControl.name,
                     }))}
-                    value={values.codeSystemVersionControl}
+                    value={codeVersionManagerProvider}
                     onChange={(value: any) =>
-                      handleChange({ target: { name: 'codeSystemVersionControl', value } })
+                      setCodeVersionManagerProvider({ value: value.value, label: value.label })
                     }
                   />
                 </div>
