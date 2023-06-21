@@ -23,8 +23,6 @@ type CreateProjectFormProps = {
   handleCancel: () => void;
   formik: any;
   actionButtonText: string;
-  action: () => void;
-  cancelAction: () => void;
 };
 
 const CreateProjectForm: React.FC<CreateProjectFormProps> = ({
@@ -38,8 +36,6 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({
   codeVersionManagerProviders,
   templateImplementations,
   actionButtonText,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  cancelAction,
 }) => {
   const { values, handleSubmit, errors, handleChange } = formik;
   const [filteredCICDProviders, setFilteredCICDProviders] =

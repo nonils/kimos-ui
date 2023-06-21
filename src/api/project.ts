@@ -6,8 +6,6 @@ export const createProject = async (
   body: ICreateProjectDTO,
   accessToken: string | undefined,
 ): Promise<IProject> => {
-  // eslint-disable-next-line no-debugger
-  debugger;
   const result = await axios.post<IProject>(`${BASE_API_URL}/projects`, body, {
     headers: {
       'Content-Type': 'application/json',

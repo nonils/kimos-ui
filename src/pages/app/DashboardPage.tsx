@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const projects: IProject[] = [
   {
+    id: '1',
     name: 'Workcation',
     href: '#',
     siteHref: '#',
@@ -17,6 +18,7 @@ const projects: IProject[] = [
     active: true,
   },
   {
+    id: '2',
     name: 'kimos-ui',
     href: '#',
     siteHref: '#',

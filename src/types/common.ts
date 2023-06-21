@@ -35,6 +35,7 @@ export type IStep = {
   name: string;
   complete: boolean;
   active: boolean;
+  // eslint-disable-next-line no-undef
   child?: JSX.Element;
   onClickAction: () => void;
 };
@@ -48,6 +49,7 @@ export type IActivityItem = {
 };
 
 export type IProject = {
+  id: string;
   name: string;
   href: string;
   siteHref: string;

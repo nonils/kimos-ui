@@ -14,7 +14,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ template, action }) => {
   return (
     <>
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-      <div className="flex flex-1 flex-col p-8 hover:shadow-lg" onClick={handleClick}>
+      <div className="flex flex-1 flex-col p-8" onClick={handleClick}>
         <img
           className="mx-auto h-32 w-32 flex-shrink-0 rounded-full"
           src={template.templateImageUrl}

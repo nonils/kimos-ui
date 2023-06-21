@@ -131,7 +131,7 @@ const SelectTemplateForm: React.FC<SelectTemplateFormProps> = ({
                 {templates.map((template) => (
                   <li
                     key={template.id}
-                    className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow"
+                    className="col-span-1 divide-y divide-gray-200 rounded-lg bg-white shadow  hover:shadow-lg"
                   >
                     <TemplateCard template={template} action={handleSelectTemplate} />
                   </li>

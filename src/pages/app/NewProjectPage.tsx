@@ -22,9 +22,12 @@ import {
   getAllTemplateImplementations,
   getAllTemplates,
 } from '../../api';
+import { useToast } from '../../hooks';
 
 const NewProjectPage: React.FC<any> = () => {
   const { getIdTokenClaims } = useAuth0();
+  const { danger, success } = useToast();
+  const [error, setError] = React.useState<string | undefined>();
   const [loading, setLoading] = React.useState<boolean>(false);
   const [cloudProviders, setCloudProviders] = React.useState<ICloudProvider[]>([]);
   const [CICDProviders, setCICDProviders] = React.useState<ICICDProvider[]>([]);
@@ -103,6 +106,12 @@ const NewProjectPage: React.FC<any> = () => {
   };
 
   useEffect(() => {
+    if (error) {
+      danger(error);
+    }
+  }, [error, danger]);
+
+  useEffect(() => {
     const timeOutId = setTimeout(
       () =>
         getAllTemplates({
@@ -119,10 +128,8 @@ const NewProjectPage: React.FC<any> = () => {
 
   useEffect(() => {}, [selectedTemplate]);
 
-  const handleCancel = () => {};
-
-  const handleSubmit = () => {
-    console.log(selectedTemplate);
+  const handleCancel = () => {
+    location.replace('/dashboard');
   };
 
   useEffect(() => {
@@ -147,12 +154,22 @@ const NewProjectPage: React.FC<any> = () => {
       jiraProjectKey,
       isPrivateRepo,
     } = values;
+
+    const templateImplementationsFiltered = templateImplementations.filter(
+      (templateImplementation) =>
+        templateImplementation.cloudProviderId === cloudProvider.value &&
+        templateImplementation.codeVersionManagerProviderId === codeVersionManagerProvider.value &&
+        templateImplementation.cicdProviderId === cicdProvider.value,
+    );
+
+    if (templateImplementationsFiltered.length === 0) {
+      setError('No template implementation found for the selected providers');
+    }
+
     setLoading(true);
     const body: ICreateProjectDTO = {
       allowsJiraIntegration,
-      cicdProviderId: cicdProvider.value,
-      cloudProviderId: cloudProvider.value,
-      codeSystemVersionControlId: codeVersionManagerProvider.value,
+      templateImplementationId: templateImplementationsFiltered[0].id,
       templateId: selectedTemplate!.id,
       name,
       description,
@@ -162,9 +179,10 @@ const NewProjectPage: React.FC<any> = () => {
       isPrivateRepo,
     };
     createProject(body, accessToken)
-      .then(() => {
+      .then((projectResponse) => {
         setLoading(false);
-        location.replace('/dashboard');
+        success('Project created successfully');
+        location.replace(`/projects/${projectResponse.id}`);
       })
       .catch(() => setLoading(false));
   };
@@ -244,15 +262,11 @@ const NewProjectPage: React.FC<any> = () => {
                 CICDProviders={CICDProviders}
                 codeVersionManagerProviders={codeSystemsVersionControl}
                 cloudProviders={cloudProviders}
-                action={handleSubmit}
-                cancelAction={handleCancel}
                 formik={formik}
                 loading={loading}
                 title={'New Project'}
                 actionButtonText={'Create project'}
-                handleCancel={() => {
-                  location.replace('/dashboard');
-                }}
+                handleCancel={handleCancel}
               />
             )}
           </div>

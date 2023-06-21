@@ -13,9 +13,7 @@ export interface ICreateProjectDTO {
   allowsJiraIntegration: boolean;
   jiraProjectKey: string;
   jiraProjectName: string;
-  codeSystemVersionControlId: string;
-  cloudProviderId: string;
-  cicdProviderId: string;
+  templateImplementationId: string;
   templateId: string;
 }
 
