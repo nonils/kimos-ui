@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useAppDispatch, useToast } from 'hooks';
 import { createProjectAction } from '../../../actions/projectActions';
 import * as Yup from 'yup';
@@ -7,7 +7,15 @@ import { useFormik } from 'formik';
 import { AppLayout, CreateAccountProjectForm } from '../../../components';
 import { useAuth0 } from '@auth0/auth0-react';
 
-export const CreateProjectPage: React.FC<any> = ({ projectLoading }) => {
+export const CreateProjectPage: React.FC = () => {
+  const { projectLoading, createProjectSuccess, createProjectError } = useSelector(
+    (appState: any) => ({
+      projectLoading: appState.projects.loading,
+      createProjectSuccess: appState.projects.successOperation,
+      createProjectError: appState.projects.error,
+    }),
+  );
+
   const { getIdTokenClaims } = useAuth0();
   const [accessToken, setAccessToken] = React.useState<string | undefined>();
 
@@ -20,11 +28,8 @@ export const CreateProjectPage: React.FC<any> = ({ projectLoading }) => {
     });
   }, [getIdTokenClaims]);
   const appDispatch = useAppDispatch();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { success, danger } = useToast();
   const handleCreateProject = async (values: any) => {
-    // eslint-disable-next-line no-debugger
-    debugger;
     appDispatch(createProjectAction(values, accessToken));
   };
   const handleCancel = () => {
@@ -43,6 +48,19 @@ export const CreateProjectPage: React.FC<any> = ({ projectLoading }) => {
     }),
   });
 
+  useEffect(() => {
+    if (createProjectSuccess) {
+      success('The project was created successfully');
+      window.location.replace('/dashboard');
+    }
+  }, [createProjectSuccess, success]);
+
+  useEffect(() => {
+    if (createProjectError) {
+      danger('The project was not created');
+    }
+  }, [createProjectError, danger]);
+
   return (
     <AppLayout title="Home" showSearchInput={false}>
       <div className="min-h-screen bg-white flex">
@@ -57,7 +75,4 @@ export const CreateProjectPage: React.FC<any> = ({ projectLoading }) => {
     </AppLayout>
   );
 };
-const select = (appState: any) => ({
-  projectLoading: appState.projects.loading,
-});
-export default connect(select)(CreateProjectPage);
+export default CreateProjectPage;

@@ -54,8 +54,7 @@ export const projectSlice = createSlice({
       state.successDelete = false;
       state.projects = [];
     },
-    CREATE_PROJECT_SUCCESS: (state, action) => {
-      console.log(action?.payload?.id);
+    CREATE_PROJECT_SUCCESS: (state) => {
       state.loading = false;
       state.error = undefined;
       state.successOperation = true;
@@ -74,5 +73,11 @@ export const projectSlice = createSlice({
   },
 });
 
-export const { CHANGE_PAGE, GET_PROJECTS_REQUEST } = projectSlice.actions;
+export const {
+  CHANGE_PAGE,
+  GET_PROJECTS_REQUEST,
+  CREATE_PROJECT_REQUEST,
+  CREATE_PROJECT_SUCCESS,
+  CREATE_PROJECT_FAILURE,
+} = projectSlice.actions;
 export default projectSlice.reducer;
