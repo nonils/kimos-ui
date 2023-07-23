@@ -48,7 +48,7 @@ export type IActivityItem = {
   time: string;
 };
 
-export type IProject = {
+export type ILightProject = {
   id: string;
   name: string;
   href: string;
@@ -60,6 +60,25 @@ export type IProject = {
   location: string;
   starred: boolean;
   active: boolean;
+};
+
+export type IOrganization = {
+  id: string;
+  name: string;
+  description: string;
+};
+
+export type IProjectDetail = {
+  id: string;
+  name: string;
+  status: string;
+  description: string;
+  organization: IOrganization;
+  type: 'ORGANIZATION' | `PERSONAL`;
+  repoProvider: string;
+  jiraConfiguration: string;
+  cicdProvider: string;
+  cloudProvider: string;
 };
 
 export interface IMultiSelectValues {

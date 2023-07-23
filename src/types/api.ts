@@ -5,7 +5,12 @@ export interface ICodeSystemVersionControl {
   url: string;
 }
 
-export interface ICreateProjectDTO {
+export interface ICreateAccountProjectDTO {
+  name: string;
+  description: string;
+}
+
+export interface ICreateApplicationDTO {
   name: string;
   description: string;
   isPrivateRepo: boolean;

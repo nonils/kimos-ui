@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ActivityFeed, AppLayout, ProjectList } from '../../components';
-import { IActivityItem, IProject } from '../../types';
+import { IActivityItem, ILightProject } from '../../types';
 import { useNavigate } from 'react-router-dom';
+import { getProjects } from '../../api';
+import { useAuth0 } from '@auth0/auth0-react';
 
-const projects: IProject[] = [
+const projects: ILightProject[] = [
   {
     id: '1',
     name: 'Workcation',
@@ -36,9 +38,32 @@ const activityItems: IActivityItem[] = [
 ];
 const DashboardPage: React.FC<any> = () => {
   const navigate = useNavigate();
+  const { getIdTokenClaims } = useAuth0();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [error, setError] = React.useState<string | undefined>();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [loading, setLoading] = React.useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [projectItems, setProjectItems] = React.useState<any[]>([]);
+  const [accessToken, setAccessToken] = React.useState<string | undefined>();
+
+  useEffect(() => {
+    const getToken = async () => {
+      return getIdTokenClaims();
+    };
+    getToken().then((potentialAccessToken) => {
+      setAccessToken(potentialAccessToken?.__raw);
+    });
+  }, [getIdTokenClaims]);
+
+  useEffect(() => {
+    if (accessToken) {
+      getProjects(accessToken).then((data) => setProjectItems(data));
+    }
+  }, [accessToken]);
 
   const handleRedirectCreateNewProject = () => {
-    navigate('/project/new', { replace: true });
+    navigate('/projects/new', { replace: true });
   };
   return (
     <AppLayout title="Home" showSearchInput={false}>

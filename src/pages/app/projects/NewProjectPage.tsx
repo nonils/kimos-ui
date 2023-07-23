@@ -1,29 +1,30 @@
 import React, { useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { AppLayout, CreateProjectForm, SelectTemplateForm } from '../../components';
+import { AppLayout, CreateProjectForm, SelectTemplateForm } from '../../../components';
 import {
   ICICDProvider,
   ICloudProvider,
   ICodeSystemVersionControl,
-  ICreateProjectDTO,
+  ICreateApplicationDTO,
   ISelectOption,
   IStep,
   ITemplate,
   ItemplateImplementation,
-} from '../../types';
+} from '../../../types';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Step } from '../../components/Step/Step';
+import { Step } from '../../../components/Step/Step';
 import {
-  createProject,
+  createProjectApplication,
   getAllCICDProviders,
   getAllCloudProviders,
   getAllCodeVersionProviders,
   getAllTemplateImplementations,
   getAllTemplates,
-} from '../../api';
-import { useToast } from '../../hooks';
+} from '../../../api';
+import { useToast } from '../../../hooks';
 
+//TODO this should be moved to a new page (ApplicationForm)
 const NewProjectPage: React.FC<any> = () => {
   const { getIdTokenClaims } = useAuth0();
   const { danger, success } = useToast();
@@ -125,9 +126,6 @@ const NewProjectPage: React.FC<any> = () => {
     );
     return () => clearTimeout(timeOutId);
   }, [searchTextTemplate, codeVersionManagerProvider, cloudProvider, CICDProvider]);
-
-  useEffect(() => {}, [selectedTemplate]);
-
   const handleCancel = () => {
     location.replace('/dashboard');
   };
@@ -167,7 +165,7 @@ const NewProjectPage: React.FC<any> = () => {
     }
 
     setLoading(true);
-    const body: ICreateProjectDTO = {
+    const body: ICreateApplicationDTO = {
       allowsJiraIntegration,
       templateImplementationId: templateImplementationsFiltered[0].id,
       templateId: selectedTemplate!.id,
@@ -178,7 +176,7 @@ const NewProjectPage: React.FC<any> = () => {
       jiraProjectKey,
       isPrivateRepo,
     };
-    createProject(body, accessToken)
+    createProjectApplication(body, accessToken)
       .then((projectResponse) => {
         setLoading(false);
         success('Project created successfully');

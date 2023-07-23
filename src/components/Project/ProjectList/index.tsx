@@ -6,15 +6,15 @@ import {
   StarIcon,
 } from '@heroicons/react/20/solid';
 import React from 'react';
-import { IProject } from '../../types';
-import { CreateActionButton } from '../CreateActionButton/CreateActionButton';
+import { ILightProject } from '../../../types';
+import { CreateActionButton } from '../../CreateActionButton/CreateActionButton';
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ');
 }
 
 type ProjectListType = {
-  projects: IProject[];
+  projects: ILightProject[];
   createNewProjectAction: () => void;
 };
 

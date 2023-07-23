@@ -17,7 +17,8 @@ import { Auth0ProviderWithNavigate } from './auth0-provider-with-navigate';
 import { DashboardPage } from './pages/app/DashboardPage';
 import { BillingPage } from './pages/app/Settings/BillingPage';
 import { IntegrationsPage } from './pages/app/Settings/IntegrationsPage';
-import { NewProjectPage } from './pages/app/NewProjectPage';
+import { ProjectById } from './pages/app/projects/ProjectById';
+import { CreateProjectPage } from './pages/app/projects/CreateProjectPage';
 // @ts-ignore
 const root = createRoot(document.getElementById('root') as HTMLElement);
 const locale = navigator.language;
@@ -53,8 +54,12 @@ root.render(
                 element={<AuthenticationGuard component={DashboardPage} />}
               />
               <Route
-                path="/project/new"
-                element={<AuthenticationGuard component={NewProjectPage} />}
+                path="/projects/new"
+                element={<AuthenticationGuard component={CreateProjectPage} />}
+              />
+              <Route
+                path="/projects/:projectId"
+                element={<AuthenticationGuard component={ProjectById} />}
               />
             </Routes>
           </Auth0ProviderWithNavigate>
