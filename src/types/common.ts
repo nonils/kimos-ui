@@ -50,16 +50,14 @@ export type IActivityItem = {
 
 export type ILightProject = {
   id: string;
-  name: string;
-  href: string;
-  siteHref: string;
-  repoHref: string;
-  repo: string;
-  tech: string;
-  lastDeploy: string;
-  location: string;
-  starred: boolean;
   active: boolean;
+  createdByUser: string;
+  createdBy: string;
+  createdAt: string;
+  description: string;
+  name: string;
+  organization: string;
+  type: string;
 };
 
 export type IOrganization = {

@@ -46,6 +46,24 @@ export const projectSlice = createSlice({
       state.successDelete = false;
       state.projects = [];
     },
+    GET_PROJECTS_SUCCESS: (state, action) => {
+      // eslint-disable-next-line no-debugger
+      debugger;
+      state.loading = false;
+      state.error = undefined;
+      state.successOperation = false;
+      state.refreshProjects = false;
+      state.successDelete = false;
+      state.projects = action.payload.content;
+      state.currentPage = action.payload.pageNumber;
+      state.pageSize = action.payload.pageSize;
+      state.totalElements = action.payload.totalElements;
+      state.numberOfPages = action.payload.totalElements / action.payload.pageSize;
+    },
+    GET_PROJECTS_FAILURE: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
     CREATE_PROJECT_REQUEST: (state) => {
       state.loading = true;
       state.error = undefined;

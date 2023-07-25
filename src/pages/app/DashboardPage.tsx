@@ -1,66 +1,61 @@
 import React, { useEffect } from 'react';
 import { ActivityFeed, AppLayout, ProjectList } from '../../components';
-import { IActivityItem, ILightProject } from '../../types';
+import { IActivityItem } from '../../types';
 import { useNavigate } from 'react-router-dom';
-import { getProjects } from '../../api';
 import { useAuth0 } from '@auth0/auth0-react';
+import { useSelector } from 'react-redux';
+import { useAppDispatch, useToast } from '../../hooks';
+import { getProjectsAction } from '../../actions/projectActions';
 
-const projects: ILightProject[] = [
-  {
-    id: '1',
-    name: 'Workcation',
-    href: '#',
-    siteHref: '#',
-    repoHref: '#',
-    repo: 'debbielewis/workcation',
-    tech: 'Laravel',
-    lastDeploy: '3h ago',
-    location: 'United states',
-    starred: true,
-    active: true,
-  },
-  {
-    id: '2',
-    name: 'kimos-ui',
-    href: '#',
-    siteHref: '#',
-    repoHref: '#',
-    repo: 'debbielewis/workcation',
-    tech: 'Laravel',
-    lastDeploy: '3h ago',
-    location: 'United states',
-    starred: true,
-    active: true,
-  },
-];
 const activityItems: IActivityItem[] = [
   { id: '1', project: 'Workcation', commit: '2d89f0c8', environment: 'production', time: '1h' },
 ];
 const DashboardPage: React.FC<any> = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const {
+    projectLoading,
+    projectsPageSize,
+    projectsPage,
+    projectsTotalElements,
+    projectError,
+    projects,
+  } = useSelector((appState: any) => ({
+    projectLoading: appState.projects.loading,
+    projectsPage: appState.projects.currentPage,
+    projectsPageSize: appState.projects.pageSize,
+    projectsTotalElements: appState.projects.totalElements,
+    projectError: appState.projects.error,
+    projects: appState.projects.projects,
+  }));
+  const appDispatch = useAppDispatch();
+  const { danger } = useToast();
   const navigate = useNavigate();
   const { getIdTokenClaims } = useAuth0();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [error, setError] = React.useState<string | undefined>();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [loading, setLoading] = React.useState<boolean>(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [projectItems, setProjectItems] = React.useState<any[]>([]);
   const [accessToken, setAccessToken] = React.useState<string | undefined>();
 
   useEffect(() => {
-    const getToken = async () => {
-      return getIdTokenClaims();
-    };
-    getToken().then((potentialAccessToken) => {
-      setAccessToken(potentialAccessToken?.__raw);
-    });
-  }, [getIdTokenClaims]);
+    if (accessToken == null) {
+      getIdTokenClaims().then((potentialAccessToken) => {
+        const rawAccessToken = potentialAccessToken?.__raw;
+        setAccessToken(rawAccessToken);
+        if (rawAccessToken != null) {
+          appDispatch(getProjectsAction(rawAccessToken));
+        }
+      });
+    }
+  }, [accessToken, appDispatch, getIdTokenClaims]);
+
+  const handleProjectChangePage = (page: number) => {
+    if (accessToken != null) {
+      appDispatch(getProjectsAction(accessToken, page));
+    }
+  };
 
   useEffect(() => {
-    if (accessToken) {
-      getProjects(accessToken).then((data) => setProjectItems(data));
+    if (projectError) {
+      danger('The projects could not be loaded');
     }
-  }, [accessToken]);
+  }, [danger, projectError]);
 
   const handleRedirectCreateNewProject = () => {
     navigate('/projects/new', { replace: true });
@@ -72,6 +67,12 @@ const DashboardPage: React.FC<any> = () => {
         <div className="min-w-0 flex-1 bg-white xl:flex">
           <ProjectList
             projects={projects}
+            baseUrlToRedirectElement={'/projects/'}
+            handleChangePage={handleProjectChangePage}
+            pageSize={projectsPageSize}
+            page={projectsPage}
+            totalElements={projectsTotalElements}
+            loading={projectLoading}
             createNewProjectAction={handleRedirectCreateNewProject}
           />
         </div>
