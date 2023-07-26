@@ -1,31 +1,31 @@
 import React, { useEffect } from 'react';
-import { getProjectById } from '../../../api';
-import { useAuth0 } from '@auth0/auth0-react';
-import { useToast } from '../../../hooks';
-import { IProjectDetail } from '../../../types';
+import { useAppDispatch, useToast } from '../../../hooks';
 import { useParams } from 'react-router-dom';
 import { AppLayout, ProjectInformationComponent } from '../../../components';
+import { useSelector } from 'react-redux';
+import { getProjectByIdAction } from '../../../actions';
+
 const ProjectById: React.FC<any> = () => {
-  const [accessToken, setAccessToken] = React.useState<string | undefined>();
-  const [project, setProject] = React.useState<IProjectDetail>();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { danger, success } = useToast();
-  const { getIdTokenClaims } = useAuth0();
+  const appDispatch = useAppDispatch();
+  const { token, project, projectError } = useSelector((appState: any) => ({
+    token: appState.authentication.token,
+    project: appState.projects.project,
+    projectError: appState.projects.error,
+  }));
+  const { danger } = useToast();
   const { projectId } = useParams();
-  useEffect(() => {
-    const getToken = async () => {
-      return getIdTokenClaims();
-    };
-    getToken().then((potentialAccessToken) => {
-      setAccessToken(potentialAccessToken?.__raw);
-    });
-  }, [getIdTokenClaims]);
 
   useEffect(() => {
-    if (projectId != null && accessToken != null) {
-      getProjectById(projectId, accessToken).then((data) => setProject(data));
+    if (projectId != null && token != null) {
+      appDispatch(getProjectByIdAction(projectId, token));
     }
-  }, [accessToken, projectId]);
+  }, [token, projectId, appDispatch]);
+
+  useEffect(() => {
+    if (projectError != null) {
+      danger('Error at the moment to get the project');
+    }
+  }, [projectError, danger]);
 
   return (
     <>

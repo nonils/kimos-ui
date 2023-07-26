@@ -47,8 +47,6 @@ export const projectSlice = createSlice({
       state.projects = [];
     },
     GET_PROJECTS_SUCCESS: (state, action) => {
-      // eslint-disable-next-line no-debugger
-      debugger;
       state.loading = false;
       state.error = undefined;
       state.successOperation = false;
@@ -64,6 +62,22 @@ export const projectSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    GET_PROJECT_REQUEST: (state) => {
+      state.loading = true;
+      state.error = undefined;
+      state.successOperation = false;
+      state.refreshProjects = false;
+      state.successDelete = false;
+      state.project = undefined;
+    },
+    GET_PROJECT_SUCCESS: (state, action) => {
+      state.loading = false;
+      state.error = undefined;
+      state.successOperation = false;
+      state.refreshProjects = false;
+      state.successDelete = false;
+      state.project = action.payload;
+    },
     CREATE_PROJECT_REQUEST: (state) => {
       state.loading = true;
       state.error = undefined;
@@ -72,13 +86,13 @@ export const projectSlice = createSlice({
       state.successDelete = false;
       state.projects = [];
     },
-    CREATE_PROJECT_SUCCESS: (state) => {
+    CREATE_PROJECT_SUCCESS: (state, payload) => {
       state.loading = false;
       state.error = undefined;
+      state.project = payload.payload;
       state.successOperation = true;
       state.refreshProjects = true;
       state.successDelete = false;
-      state.projects = [];
     },
     CREATE_PROJECT_FAILURE: (state, action) => {
       state.loading = false;

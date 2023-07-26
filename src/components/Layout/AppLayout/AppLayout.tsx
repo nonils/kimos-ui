@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import './styles.scss';
 import { Dialog, Transition } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XCircleIcon } from '@heroicons/react/24/outline';
@@ -7,7 +7,9 @@ import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import { useAuth0 } from '@auth0/auth0-react';
 import { ProfileDropdown } from '../../ProfileDropdown/ProfileDropdown';
 import { Navigation } from '../../Navigation/Navigation';
-import { useGetAuthenticatedUser } from '../../../hooks/user/useGetAuthenticatedUser';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from '../../../hooks';
+import { getUserAction, setAccessTokenAction } from '../../../actions';
 
 const CloseButton = ({ closeToast }: Partial<CloseButtonProps>) => {
   return (
@@ -38,9 +40,29 @@ const AppLayout: React.FC<AppLayoutProps> = ({
   searchValue,
   searchAction,
 }: AppLayoutProps) => {
+  const { getIdTokenClaims } = useAuth0();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const authenticated = useAuth0().isAuthenticated;
-  const user = useGetAuthenticatedUser();
+  const { user, token } = useSelector((appState: any) => ({
+    user: appState.authentication.user,
+    loadingAuthentication: appState.authentication.loading,
+    token: appState.authentication.token,
+  }));
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    const getToken = async () => {
+      return getIdTokenClaims();
+    };
+    getToken().then((potentialAccessToken) => {
+      dispatch(setAccessTokenAction(potentialAccessToken?.__raw));
+    });
+  }, [dispatch, getIdTokenClaims]);
+
+  useEffect(() => {
+    if (token) {
+      dispatch(getUserAction(token));
+    }
+  }, [dispatch, token]);
+
   return (
     <>
       <div className="h-full">
@@ -167,7 +189,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                   <span className="sr-only">View notifications</span>
                   <BellIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
-                <ProfileDropdown isAuthenticated={authenticated} user={user} />
+                <ProfileDropdown isAuthenticated={user !== undefined} user={user} />
               </div>
             </div>
           </div>

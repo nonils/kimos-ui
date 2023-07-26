@@ -20,6 +20,16 @@ export const getProjects = async (
   return result.data;
 };
 
+export const getProjectById = async (projectId: string, accessToken: string | undefined) => {
+  const result = await axios.get<IProjectDetail>(`${BASE_API_URL}/projects/${projectId}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return result.data;
+};
+
 export const createAccountProject = async (
   body: ICreateAccountProjectDTO,
   accessToken: string | undefined,
@@ -39,19 +49,6 @@ export const createProjectApplication = async (
   accessToken: string | undefined,
 ): Promise<ILightProject> => {
   const result = await axios.post<ILightProject>(`${BASE_API_URL}/projects`, body, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-  return result.data;
-};
-
-export const getProjectById = async (
-  projectId: string,
-  accessToken: string | undefined,
-): Promise<IProjectDetail> => {
-  const result = await axios.get<IProjectDetail>(`${BASE_API_URL}/projects/${projectId}`, {
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${accessToken}`,

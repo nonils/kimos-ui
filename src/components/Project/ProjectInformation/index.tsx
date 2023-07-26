@@ -1,9 +1,9 @@
 import React from 'react';
-import { IProjectDetail } from '../../../types';
+import { ILightProject } from '../../../types';
 import { ProjectInformationField } from './ProjectInformationField';
 
 type ProjectInformationProps = {
-  project: IProjectDetail | undefined;
+  project: ILightProject | undefined;
 };
 const ProjectInformationComponent: React.FC<ProjectInformationProps> = ({ project }) => {
   return (
@@ -21,7 +21,6 @@ const ProjectInformationComponent: React.FC<ProjectInformationProps> = ({ projec
             label="Project description"
             value={project ? project.description : '-'}
           />
-          <ProjectInformationField label="Project status" value={project ? project.status : '-'} />
         </dl>
       </div>
     </div>

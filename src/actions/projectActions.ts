@@ -1,5 +1,7 @@
+// @ts-ignore
+
 import projectReducerConstant from '../constants/reducers/projects';
-import { createAccountProject, getProjects } from '../api';
+import { createAccountProject, getProjectById, getProjects } from '../api';
 import { ICreateAccountProjectDTO } from '../types';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -22,6 +24,26 @@ export const getProjectsAction =
       });
     }
   };
+
+export const getProjectByIdAction = (id: string, token: string) => {
+  return async (dispatch: any) => {
+    dispatch({
+      type: projectReducerConstant.GET_PROJECT_REQUEST,
+    });
+    try {
+      const response = await getProjectById(id, token);
+      dispatch({
+        type: projectReducerConstant.GET_PROJECT_SUCCESS,
+        payload: response,
+      });
+    } catch (error) {
+      dispatch({
+        type: projectReducerConstant.GET_PROJECT_FAILURE,
+        payload: error,
+      });
+    }
+  };
+};
 
 export const createProjectAction = (
   body: ICreateAccountProjectDTO,

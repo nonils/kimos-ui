@@ -38,8 +38,6 @@ const ProjectList: React.FC<ProjectListType> = ({
       </div>
     );
   }
-  // eslint-disable-next-line no-debugger
-  debugger;
   return (
     <div className="bg-white lg:min-w-0 lg:flex-1">
       <div className="border-b border-t border-gray-200 pb-4 pl-4 pr-6 pt-4 sm:pl-6 lg:pl-8 xl:border-t-0 xl:pl-6 xl:pt-6">

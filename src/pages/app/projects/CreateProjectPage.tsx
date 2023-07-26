@@ -5,32 +5,20 @@ import { createProjectAction } from '../../../actions/projectActions';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { AppLayout, CreateAccountProjectForm } from '../../../components';
-import { useAuth0 } from '@auth0/auth0-react';
 
 export const CreateProjectPage: React.FC = () => {
-  const { projectLoading, createProjectSuccess, createProjectError } = useSelector(
+  const { token, projectLoading, createProjectSuccess, createProjectError } = useSelector(
     (appState: any) => ({
+      token: appState.authentication.token,
       projectLoading: appState.projects.loading,
       createProjectSuccess: appState.projects.successOperation,
       createProjectError: appState.projects.error,
     }),
   );
-
-  const { getIdTokenClaims } = useAuth0();
-  const [accessToken, setAccessToken] = React.useState<string | undefined>();
-
-  useEffect(() => {
-    const getToken = async () => {
-      return getIdTokenClaims();
-    };
-    getToken().then((potentialAccessToken) => {
-      setAccessToken(potentialAccessToken?.__raw);
-    });
-  }, [getIdTokenClaims]);
   const appDispatch = useAppDispatch();
   const { success, danger } = useToast();
   const handleCreateProject = async (values: any) => {
-    appDispatch(createProjectAction(values, accessToken));
+    appDispatch(createProjectAction(values, token));
   };
   const handleCancel = () => {
     window.location.replace('/dashboard');

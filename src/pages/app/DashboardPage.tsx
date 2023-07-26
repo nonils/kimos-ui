@@ -2,10 +2,9 @@ import React, { useEffect } from 'react';
 import { ActivityFeed, AppLayout, ProjectList } from '../../components';
 import { IActivityItem } from '../../types';
 import { useNavigate } from 'react-router-dom';
-import { useAuth0 } from '@auth0/auth0-react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch, useToast } from '../../hooks';
-import { getProjectsAction } from '../../actions/projectActions';
+import { getProjectsAction } from '../../actions';
 
 const activityItems: IActivityItem[] = [
   { id: '1', project: 'Workcation', commit: '2d89f0c8', environment: 'production', time: '1h' },
@@ -13,6 +12,7 @@ const activityItems: IActivityItem[] = [
 const DashboardPage: React.FC<any> = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const {
+    token,
     projectLoading,
     projectsPageSize,
     projectsPage,
@@ -20,6 +20,7 @@ const DashboardPage: React.FC<any> = () => {
     projectError,
     projects,
   } = useSelector((appState: any) => ({
+    token: appState.authentication.token,
     projectLoading: appState.projects.loading,
     projectsPage: appState.projects.currentPage,
     projectsPageSize: appState.projects.pageSize,
@@ -28,28 +29,22 @@ const DashboardPage: React.FC<any> = () => {
     projects: appState.projects.projects,
   }));
   const appDispatch = useAppDispatch();
+  const [isInitialized, setIsInitialized] = React.useState(false);
   const { danger } = useToast();
   const navigate = useNavigate();
-  const { getIdTokenClaims } = useAuth0();
-  const [accessToken, setAccessToken] = React.useState<string | undefined>();
-
-  useEffect(() => {
-    if (accessToken == null) {
-      getIdTokenClaims().then((potentialAccessToken) => {
-        const rawAccessToken = potentialAccessToken?.__raw;
-        setAccessToken(rawAccessToken);
-        if (rawAccessToken != null) {
-          appDispatch(getProjectsAction(rawAccessToken));
-        }
-      });
-    }
-  }, [accessToken, appDispatch, getIdTokenClaims]);
 
   const handleProjectChangePage = (page: number) => {
-    if (accessToken != null) {
-      appDispatch(getProjectsAction(accessToken, page));
+    if (token != null) {
+      appDispatch(getProjectsAction(token, page));
     }
   };
+
+  useEffect(() => {
+    if (token != null && !isInitialized) {
+      appDispatch(getProjectsAction(token, projectsPage));
+      setIsInitialized(true);
+    }
+  }, [appDispatch, isInitialized, projectsPage, token]);
 
   useEffect(() => {
     if (projectError) {
