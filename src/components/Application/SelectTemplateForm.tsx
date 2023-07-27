@@ -7,8 +7,8 @@ import {
   ICodeSystemVersionControl,
   ISelectOption,
   ITemplate,
-} from '../../../types';
-import { Select } from '../../Select/Select';
+} from '../../types';
+import { Select } from '../Select/Select';
 
 type SelectTemplateFormProps = {
   CICDProviders: ICICDProvider[];

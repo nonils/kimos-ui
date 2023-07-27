@@ -19,6 +19,7 @@ import { BillingPage } from './pages/app/Settings/BillingPage';
 import { IntegrationsPage } from './pages/app/Settings/IntegrationsPage';
 import { ProjectById } from './pages/app/projects/ProjectById';
 import { CreateProjectPage } from './pages/app/projects/CreateProjectPage';
+import { NewApplicationPage } from './pages/app/application/NewApplication';
 // @ts-ignore
 const root = createRoot(document.getElementById('root') as HTMLElement);
 const locale = navigator.language;
@@ -60,6 +61,10 @@ root.render(
               <Route
                 path="/projects/:projectId"
                 element={<AuthenticationGuard component={ProjectById} />}
+              />
+              <Route
+                path="/applications/new"
+                element={<AuthenticationGuard component={NewApplicationPage} />}
               />
             </Routes>
           </Auth0ProviderWithNavigate>

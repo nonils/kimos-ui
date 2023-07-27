@@ -1,10 +1,6 @@
-import React, { useEffect } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
-import { AppLayout, CreateProjectForm, SelectTemplateForm } from '../../../components';
+import React, { useEffect, useState } from 'react';
+import { AppLayout, CreateApplicationForm, SelectTemplateForm } from '../../../components';
 import {
-  ICICDProvider,
-  ICloudProvider,
-  ICodeSystemVersionControl,
   ICreateApplicationDTO,
   ISelectOption,
   IStep,
@@ -14,28 +10,60 @@ import {
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Step } from '../../../components/Step/Step';
+import { useAppDispatch, useToast } from '../../../hooks';
+import { useSelector } from 'react-redux';
 import {
-  createProjectApplication,
-  getAllCICDProviders,
-  getAllCloudProviders,
-  getAllCodeVersionProviders,
-  getAllTemplateImplementations,
-  getAllTemplates,
-} from '../../../api';
-import { useToast } from '../../../hooks';
+  createApplicationAction,
+  getAllTemplatesPaginatedAction,
+  getCICDProvidersAction,
+  getCloudProvidersAction,
+  getCodeVersionManagerProvidersAction,
+  getTemplateImplementationsByTemplateIdAction,
+} from '../../../actions';
 
-//TODO this should be moved to a new page (ApplicationForm)
-const NewProjectPage: React.FC<any> = () => {
-  const { getIdTokenClaims } = useAuth0();
+const NewApplicationPage: React.FC<any> = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { danger, success } = useToast();
-  const [error, setError] = React.useState<string | undefined>();
-  const [loading, setLoading] = React.useState<boolean>(false);
-  const [cloudProviders, setCloudProviders] = React.useState<ICloudProvider[]>([]);
-  const [CICDProviders, setCICDProviders] = React.useState<ICICDProvider[]>([]);
-  const [templates, setTemplates] = React.useState<ITemplate[]>([]);
-  const [codeSystemsVersionControl, setCodeSystemsVersionControl] = React.useState<
-    ICodeSystemVersionControl[]
-  >([]);
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
+  const appDispatch = useAppDispatch();
+  const {
+    accessToken,
+    codeVersionManagerProviders,
+    codeVersionManagerProviderLoading,
+    codeVersionManagerProviderError,
+    cloudProviders,
+    cloudProviderLoading,
+    cloudProviderError,
+    CICDProviders,
+    CICDProviderLoading,
+    CICDProviderError,
+    templateImplementations,
+    templateImplementationLoading,
+    templateImplementationError,
+    templates,
+    templateError,
+    templateLoading,
+  } = useSelector((appState: any) => {
+    return {
+      accessToken: appState.authentication.token,
+      codeVersionManagerProviders: appState.codeVersionManagerProvider.codeVersionManagerProviders,
+      codeVersionManagerProviderLoading: appState.codeVersionManagerProvider.loading,
+      codeVersionManagerProviderError: appState.codeVersionManagerProvider.error,
+      cloudProviders: appState.cloudProvider.cloudProviders,
+      cloudProviderLoading: appState.cloudProvider.loading,
+      cloudProviderError: appState.cloudProvider.error,
+      CICDProviders: appState.CICDProvider.CICDProviders,
+      CICDProviderLoading: appState.CICDProvider.loading,
+      CICDProviderError: appState.CICDProvider.error,
+      templateImplementations: appState.templateImplementation.templateImplementations,
+      templateImplementationError: appState.templateImplementation.error,
+      templateImplementationLoading: appState.templateImplementation.loading,
+      templates: appState.template.templates,
+      templateError: appState.template.error,
+      templateLoading: appState.template.loading,
+    };
+  });
+
   const [cloudProvider, setCloudProvider] = React.useState<ISelectOption | undefined>(undefined);
   const [CICDProvider, setCICDProvider] = React.useState<ISelectOption | undefined>(undefined);
   const [codeVersionManagerProvider, setCodeVersionManagerProvider] = React.useState<
@@ -44,10 +72,7 @@ const NewProjectPage: React.FC<any> = () => {
   const [searchTextTemplate, setSearchTextTemplate] = React.useState<string>('');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [page, setPage] = React.useState<number>(0);
-  const [templateImplementations, setTemplateImplementations] = React.useState<
-    ItemplateImplementation[]
-  >([]);
-  const [accessToken, setAccessToken] = React.useState<string | undefined>();
+
   const [selectedTemplate, setSelectedTemplate] = React.useState<ITemplate | null>(null);
   const [steps, setSteps] = React.useState<IStep[]>([
     {
@@ -71,34 +96,9 @@ const NewProjectPage: React.FC<any> = () => {
   ]);
   const [currentStep, setCurrentStep] = React.useState<IStep>(steps[0]);
 
-  const getAllTemplatesCallback = async (data: any) => {
-    setTemplates(data.data);
-  };
-  const getAllCIProvidersCallback = async (data: any) => {
-    setCICDProviders(data);
-  };
-  const getAllCloudProvidersCallback = async (data: any) => {
-    setCloudProviders(data);
-  };
-
-  const getAllCodeVersionProvidersCallback = async (data: any) => {
-    setCodeSystemsVersionControl(data);
-  };
-
-  useEffect(() => {
-    getAllTemplates({ callback: getAllTemplatesCallback });
-    getAllCICDProviders(getAllCIProvidersCallback);
-    getAllCodeVersionProviders(getAllCodeVersionProvidersCallback);
-    getAllCloudProviders(getAllCloudProvidersCallback);
-  }, []);
-
-  const getAllTemplateImplementationsCallback = async (data: any) => {
-    setTemplateImplementations(data);
-  };
-
   const handleSelectedTemplate = (template: ITemplate) => {
     setSelectedTemplate(template);
-    getAllTemplateImplementations(template.id, getAllTemplateImplementationsCallback);
+    appDispatch(getTemplateImplementationsByTemplateIdAction(template.id, accessToken));
     const updatedSteps = [...steps];
     updatedSteps[0] = { ...updatedSteps[0], active: false, complete: true };
     updatedSteps[1] = { ...updatedSteps[1], active: true, complete: false };
@@ -106,39 +106,69 @@ const NewProjectPage: React.FC<any> = () => {
     setCurrentStep(steps[1]);
   };
 
+  /*Init useEffect*/
   useEffect(() => {
-    if (error) {
-      danger(error);
+    if (!isInitialized && accessToken !== null && accessToken !== undefined) {
+      appDispatch(
+        getAllTemplatesPaginatedAction({ token: accessToken, search: searchTextTemplate, page }),
+      );
+      appDispatch(getCICDProvidersAction(accessToken));
+      appDispatch(getCodeVersionManagerProvidersAction(accessToken));
+      appDispatch(getCloudProvidersAction(accessToken));
+      setIsInitialized(true);
     }
-  }, [error, danger]);
+  }, [accessToken, appDispatch, isInitialized, page, searchTextTemplate]);
 
+  /*Search effect*/
   useEffect(() => {
     const timeOutId = setTimeout(
       () =>
-        getAllTemplates({
-          callback: getAllTemplatesCallback,
-          search: searchTextTemplate,
-          cloudProvider,
-          CICDProvider,
-          codeVersionManagerProvider,
-        }),
+        appDispatch(
+          getAllTemplatesPaginatedAction({
+            token: accessToken,
+            search: searchTextTemplate,
+            cloudProvider,
+            CICDProvider,
+            codeVersionManagerProvider,
+          }),
+        ),
       500,
     );
     return () => clearTimeout(timeOutId);
-  }, [searchTextTemplate, codeVersionManagerProvider, cloudProvider, CICDProvider]);
+  }, [
+    searchTextTemplate,
+    codeVersionManagerProvider,
+    cloudProvider,
+    CICDProvider,
+    appDispatch,
+    accessToken,
+  ]);
+
+  /*Error use effect*/
+  useEffect(() => {
+    if (
+      codeVersionManagerProviderError ||
+      cloudProviderError ||
+      CICDProviderError ||
+      templateError ||
+      templateImplementationError
+    ) {
+      danger(
+        'An error fetching the information has occured, Please try again. If the error persists contact with the suport team',
+      );
+    }
+  }, [
+    CICDProviderError,
+    cloudProviderError,
+    codeVersionManagerProviderError,
+    danger,
+    templateError,
+    templateImplementationError,
+  ]);
+
   const handleCancel = () => {
     location.replace('/dashboard');
   };
-
-  useEffect(() => {
-    const getToken = async () => {
-      return getIdTokenClaims();
-    };
-    getToken().then((potentialAccessToken) => {
-      setAccessToken(potentialAccessToken?.__raw);
-    });
-  }, [getIdTokenClaims]);
-
   const handleCreateProject = async (values: any) => {
     const {
       name,
@@ -154,17 +184,16 @@ const NewProjectPage: React.FC<any> = () => {
     } = values;
 
     const templateImplementationsFiltered = templateImplementations.filter(
-      (templateImplementation) =>
+      (templateImplementation: ItemplateImplementation) =>
         templateImplementation.cloudProviderId === cloudProvider.value &&
         templateImplementation.codeVersionManagerProviderId === codeVersionManagerProvider.value &&
         templateImplementation.cicdProviderId === cicdProvider.value,
     );
 
     if (templateImplementationsFiltered.length === 0) {
-      setError('No template implementation found for the selected providers');
+      // setError('No template implementation found for the selected providers');
     }
 
-    setLoading(true);
     const body: ICreateApplicationDTO = {
       allowsJiraIntegration,
       templateImplementationId: templateImplementationsFiltered[0].id,
@@ -176,13 +205,7 @@ const NewProjectPage: React.FC<any> = () => {
       jiraProjectKey,
       isPrivateRepo,
     };
-    createProjectApplication(body, accessToken)
-      .then((projectResponse) => {
-        setLoading(false);
-        success('Project created successfully');
-        location.replace(`/projects/${projectResponse.id}`);
-      })
-      .catch(() => setLoading(false));
+    appDispatch(createApplicationAction(body, accessToken));
   };
 
   const formik = useFormik({
@@ -245,25 +268,37 @@ const NewProjectPage: React.FC<any> = () => {
                 setSearch={setSearchTextTemplate}
                 setSelectedTemplate={handleSelectedTemplate}
                 CICDProviders={CICDProviders}
-                codeSystemsVersionControl={codeSystemsVersionControl}
+                codeSystemsVersionControl={codeVersionManagerProviders}
                 action={steps[0].onClickAction}
                 cancelAction={handleCancel}
-                loading={loading}
+                loading={
+                  CICDProviderLoading ||
+                  cloudProviderLoading ||
+                  templateLoading ||
+                  codeVersionManagerProviderLoading ||
+                  templateImplementationLoading /*TODO add create application loading here*/
+                }
                 title={'New Project'}
                 templates={templates}
                 cloudProviders={cloudProviders}
               />
             )}
             {currentStep.id === '2' && (
-              <CreateProjectForm
+              <CreateApplicationForm
                 templateImplementations={templateImplementations}
                 CICDProviders={CICDProviders}
-                codeVersionManagerProviders={codeSystemsVersionControl}
+                codeVersionManagerProviders={codeVersionManagerProviders}
                 cloudProviders={cloudProviders}
                 formik={formik}
-                loading={loading}
-                title={'New Project'}
-                actionButtonText={'Create project'}
+                loading={
+                  CICDProviderLoading ||
+                  cloudProviderLoading ||
+                  templateLoading ||
+                  codeVersionManagerProviderLoading ||
+                  templateImplementationLoading /*TODO add create application loading here*/
+                }
+                title={'New application'}
+                actionButtonText={'Create application'}
                 handleCancel={handleCancel}
               />
             )}
@@ -274,4 +309,4 @@ const NewProjectPage: React.FC<any> = () => {
   );
 };
 
-export { NewProjectPage };
+export { NewApplicationPage };

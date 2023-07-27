@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react';
-import { Stack } from '../../Stack/Stack';
-import { Form } from '../../Form/Form';
-import { InputText } from '../../InputText/InputText';
+import { Stack } from '../Stack/Stack';
+import { Form } from '../Form/Form';
+import { InputText } from '../InputText/InputText';
 import {
   ICICDProvider,
   ICloudProvider,
   ICodeSystemVersionControl,
   ItemplateImplementation,
-} from '../../../types';
-import { Select } from '../../Select/Select';
-import { CustomSwitch } from '../../Switch/CustomSwitch';
-import { Button } from '../../Button/Button';
+} from '../../types';
+import { Select } from '../Select/Select';
+import { CustomSwitch } from '../Switch/CustomSwitch';
+import { Button } from '../Button/Button';
 
-type CreateProjectFormProps = {
+type CreateApplicationProps = {
   title?: string;
   CICDProviders: ICICDProvider[];
   codeVersionManagerProviders: ICodeSystemVersionControl[];
@@ -25,7 +25,7 @@ type CreateProjectFormProps = {
   actionButtonText: string;
 };
 
-const CreateProjectForm: React.FC<CreateProjectFormProps> = ({
+const CreateApplicationForm: React.FC<CreateApplicationProps> = ({
   title,
   showTitle = false,
   loading,
@@ -227,4 +227,4 @@ const CreateProjectForm: React.FC<CreateProjectFormProps> = ({
   );
 };
 
-export { CreateProjectForm };
+export { CreateApplicationForm };

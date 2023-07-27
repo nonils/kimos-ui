@@ -21,12 +21,12 @@ const DashboardPage: React.FC<any> = () => {
     projects,
   } = useSelector((appState: any) => ({
     token: appState.authentication.token,
-    projectLoading: appState.projects.loading,
-    projectsPage: appState.projects.currentPage,
-    projectsPageSize: appState.projects.pageSize,
-    projectsTotalElements: appState.projects.totalElements,
-    projectError: appState.projects.error,
-    projects: appState.projects.projects,
+    projectLoading: appState.project.loading,
+    projectsPage: appState.project.currentPage,
+    projectsPageSize: appState.project.pageSize,
+    projectsTotalElements: appState.project.totalElements,
+    projectError: appState.project.error,
+    projects: appState.project.projects,
   }));
   const appDispatch = useAppDispatch();
   const [isInitialized, setIsInitialized] = React.useState(false);

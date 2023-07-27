@@ -1,8 +1,20 @@
+import { ISelectOption } from './common';
+
 export interface ICodeSystemVersionControl {
   id: string;
   name: string;
   logo: string;
   url: string;
+}
+
+export interface GetAllTemplatesParams {
+  token: string;
+  search?: string;
+  cloudProvider?: ISelectOption;
+  codeVersionManagerProvider?: ISelectOption;
+  CICDProvider?: ISelectOption;
+  page?: number;
+  size?: number;
 }
 
 export interface ICreateAccountProjectDTO {

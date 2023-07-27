@@ -10,9 +10,9 @@ export const CreateProjectPage: React.FC = () => {
   const { token, projectLoading, createProjectSuccess, createProjectError } = useSelector(
     (appState: any) => ({
       token: appState.authentication.token,
-      projectLoading: appState.projects.loading,
-      createProjectSuccess: appState.projects.successOperation,
-      createProjectError: appState.projects.error,
+      projectLoading: appState.project.loading,
+      createProjectSuccess: appState.project.successOperation,
+      createProjectError: appState.project.error,
     }),
   );
   const appDispatch = useAppDispatch();

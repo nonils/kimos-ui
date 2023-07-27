@@ -41,6 +41,7 @@ export { StatsPanel } from './StatsPanel/StatsPanel';
 export { ProfileDropdown } from './ProfileDropdown/ProfileDropdown';
 export { DashboardTabs } from './DashboardTabs/DashboardTabs';
 export { TemplateCard } from './TemplateCard/TemplateCard';
+export * from './Application';
 export * from './Project';
 export * from './FormImpl';
 export * from './AuthenticationGuard/AuthenticationGuard';

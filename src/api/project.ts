@@ -42,17 +42,3 @@ export const createAccountProject = async (
   });
   return result.data;
 };
-
-/*TODO this should be removed to applciation*/
-export const createProjectApplication = async (
-  body: ICreateAccountProjectDTO,
-  accessToken: string | undefined,
-): Promise<ILightProject> => {
-  const result = await axios.post<ILightProject>(`${BASE_API_URL}/projects`, body, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-  return result.data;
-};

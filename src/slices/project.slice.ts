@@ -31,7 +31,7 @@ const initialState: initialStateType = {
   pageSize: 10,
 };
 export const projectSlice = createSlice({
-  name: 'projects',
+  name: 'project',
   initialState,
   reducers: {
     CHANGE_PAGE: (state, action) => {
