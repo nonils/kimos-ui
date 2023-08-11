@@ -63,7 +63,7 @@ root.render(
                 element={<AuthenticationGuard component={ProjectById} />}
               />
               <Route
-                path="/applications/new"
+                path="/projects/:projectId/applications/new"
                 element={<AuthenticationGuard component={NewApplicationPage} />}
               />
             </Routes>

@@ -45,6 +45,11 @@ const CreateApplicationForm: React.FC<CreateApplicationProps> = ({
   const [filteredCodeVersionManagerProviders, setFilteredCodeVersionManagerProviders] =
     React.useState<ICodeSystemVersionControl[]>(codeVersionManagerProviders);
 
+  const filterProvidersById = (templates: any[], providers: any[], prop: string) => {
+    const uniqueIds = new Set(templates.map((template) => template[prop] as string));
+    return providers.filter((provider) => uniqueIds.has(provider.id));
+  };
+
   useEffect(() => {
     if (templateImplementations.length === 0) return;
     const filteredTemplateImplementations = templateImplementations.filter(
@@ -67,26 +72,17 @@ const CreateApplicationForm: React.FC<CreateApplicationProps> = ({
       },
     );
     setFilteredCICDProviders(
-      filteredTemplateImplementations
-        .map((template) => template.cicdProviderId)
-        .map((id) => CICDProviders.find((cicdProvider) => cicdProvider.id === id))
-        .filter((x) => x !== undefined) as ICICDProvider[],
+      filterProvidersById(filteredTemplateImplementations, CICDProviders, 'cicdProviderId'),
     );
     setFilteredCloudProviders(
-      filteredTemplateImplementations
-        .map((template) => template.cloudProviderId)
-        .map((id) => cloudProviders.find((cloudProvider) => cloudProvider.id === id))
-        .filter((x) => x !== undefined) as ICloudProvider[],
+      filterProvidersById(filteredTemplateImplementations, cloudProviders, 'cloudProviderId'),
     );
     setFilteredCodeVersionManagerProviders(
-      filteredTemplateImplementations
-        .map((template) => template.codeVersionManagerProviderId)
-        .map((id) =>
-          codeVersionManagerProviders.find(
-            (codeVersionManagerProvider) => codeVersionManagerProvider.id === id,
-          ),
-        )
-        .filter((x) => x !== undefined) as ICodeSystemVersionControl[],
+      filterProvidersById(
+        filteredTemplateImplementations,
+        codeVersionManagerProviders,
+        'codeVersionManagerProviderId',
+      ),
     );
   }, [
     values.cicdProvider,

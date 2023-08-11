@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useAppDispatch, useToast } from 'hooks';
-import { createProjectAction } from '../../../actions/projectActions';
+import { createProjectAction } from '../../../actions';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { AppLayout, CreateAccountProjectForm } from '../../../components';
+import { useNavigate } from 'react-router-dom';
 
 export const CreateProjectPage: React.FC = () => {
   const { token, projectLoading, createProjectSuccess, createProjectError } = useSelector(
@@ -16,12 +17,13 @@ export const CreateProjectPage: React.FC = () => {
     }),
   );
   const appDispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { success, danger } = useToast();
   const handleCreateProject = async (values: any) => {
     appDispatch(createProjectAction(values, token));
   };
   const handleCancel = () => {
-    window.location.replace('/dashboard');
+    navigate('/dashboard');
   };
 
   const formik = useFormik({
@@ -39,9 +41,9 @@ export const CreateProjectPage: React.FC = () => {
   useEffect(() => {
     if (createProjectSuccess) {
       success('The project was created successfully');
-      window.location.replace('/dashboard');
+      navigate('/dashboard');
     }
-  }, [createProjectSuccess, success]);
+  }, [createProjectSuccess, navigate, success]);
 
   useEffect(() => {
     if (createProjectError) {

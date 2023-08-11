@@ -39,7 +39,7 @@ export const templateImplementationSlice = createSlice({
       state.successOperation = false;
       state.refreshTemplateImplementations = false;
       state.successDelete = false;
-      state.templateImplementations = action.payload.content;
+      state.templateImplementations = action.payload;
     },
     GET_TEMPLATE_IMPLEMENTATIONS_FAILURE: (state, action) => {
       state.loading = false;

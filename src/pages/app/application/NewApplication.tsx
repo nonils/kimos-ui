@@ -20,14 +20,18 @@ import {
   getCodeVersionManagerProvidersAction,
   getTemplateImplementationsByTemplateIdAction,
 } from '../../../actions';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const NewApplicationPage: React.FC<any> = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { danger, success } = useToast();
   const [isInitialized, setIsInitialized] = useState<boolean>(false);
   const appDispatch = useAppDispatch();
+  const { projectId } = useParams();
+  const navigate = useNavigate();
   const {
     accessToken,
+    applicationSuccessOperation,
     codeVersionManagerProviders,
     codeVersionManagerProviderLoading,
     codeVersionManagerProviderError,
@@ -46,6 +50,7 @@ const NewApplicationPage: React.FC<any> = () => {
   } = useSelector((appState: any) => {
     return {
       accessToken: appState.authentication.token,
+      applicationSuccessOperation: appState.application.successOperation,
       codeVersionManagerProviders: appState.codeVersionManagerProvider.codeVersionManagerProviders,
       codeVersionManagerProviderLoading: appState.codeVersionManagerProvider.loading,
       codeVersionManagerProviderError: appState.codeVersionManagerProvider.error,
@@ -166,8 +171,15 @@ const NewApplicationPage: React.FC<any> = () => {
     templateImplementationError,
   ]);
 
+  useEffect(() => {
+    if (applicationSuccessOperation) {
+      success('Application created successfully');
+      navigate(`/projects/${projectId}`);
+    }
+  }, [applicationSuccessOperation, navigate, projectId, success]);
+
   const handleCancel = () => {
-    location.replace('/dashboard');
+    navigate(`/projects/${projectId}`);
   };
   const handleCreateProject = async (values: any) => {
     const {
@@ -191,11 +203,12 @@ const NewApplicationPage: React.FC<any> = () => {
     );
 
     if (templateImplementationsFiltered.length === 0) {
-      // setError('No template implementation found for the selected providers');
+      //setError('No template implementation found for the selected providers');
     }
 
     const body: ICreateApplicationDTO = {
       allowsJiraIntegration,
+      projectId: projectId ? projectId : '',
       templateImplementationId: templateImplementationsFiltered[0].id,
       templateId: selectedTemplate!.id,
       name,

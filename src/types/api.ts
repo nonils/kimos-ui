@@ -22,8 +22,20 @@ export interface ICreateAccountProjectDTO {
   description: string;
 }
 
+export interface ILightApplication {
+  id: string;
+  name: string;
+  status: string;
+  description: string;
+  isPrivateRepo: boolean;
+  repositoryName: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface ICreateApplicationDTO {
   name: string;
+  projectId: string;
   description: string;
   isPrivateRepo: boolean;
   repositoryName: string;

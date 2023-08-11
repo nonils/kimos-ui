@@ -7,7 +7,6 @@ type TemplateCardProps = {
 
 const TemplateCard: React.FC<TemplateCardProps> = ({ template, action }) => {
   const handleClick = () => {
-    console.log('hice click');
     action(template);
   };
 

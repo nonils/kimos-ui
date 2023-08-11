@@ -6,11 +6,13 @@ import cloudProviderSlice from './slices/cloudProvider.slice';
 import CICDProviderSlice from './slices/CICDProvider.slice';
 import templateImplementationSlice from './slices/templateImplementation.slice';
 import templateSlice from './slices/template.slice';
+import applicationSlice from './slices/application.slice';
 
 export const store = configureStore({
   reducer: {
     project: projectSlice,
     authentication: authenticationSlice,
+    application: applicationSlice,
     codeVersionManagerProvider: codeVersionManagerProviderSlice,
     cloudProvider: cloudProviderSlice,
     CICDProvider: CICDProviderSlice,
