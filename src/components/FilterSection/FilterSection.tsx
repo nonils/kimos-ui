@@ -3,6 +3,7 @@ import React, { Fragment, useState } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { Button } from '../Button/Button';
 import { ChevronDownIcon } from '@heroicons/react/24/solid';
+import { useNavigate } from 'react-router-dom';
 
 const activeFilters = [{ value: 'objects', label: 'Objects' }];
 
@@ -24,6 +25,7 @@ const FilterSection: React.FC<Prop> = ({
   createButtonLabel,
   createButtonId,
 }) => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   return (
     <div className="py-4 sm:py-6 lg:max-w-7xl lg:mx-auto lg:px-8 bg-white sm:rounded-lg">
@@ -234,7 +236,7 @@ const FilterSection: React.FC<Prop> = ({
                   <Button
                     id={createButtonId}
                     type="button"
-                    onClick={() => window.location.replace(pathToCreateElement)}
+                    onClick={() => navigate(pathToCreateElement)}
                     variant="primary"
                   >
                     {createButtonLabel}

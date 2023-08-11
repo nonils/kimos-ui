@@ -1,42 +1,59 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ActivityFeed, AppLayout, ProjectList } from '../../components';
-import { IActivityItem, IProject } from '../../types';
+import { IActivityItem } from '../../types';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useAppDispatch, useToast } from '../../hooks';
+import { getProjectsAction } from '../../actions';
 
-const projects: IProject[] = [
-  {
-    name: 'Workcation',
-    href: '#',
-    siteHref: '#',
-    repoHref: '#',
-    repo: 'debbielewis/workcation',
-    tech: 'Laravel',
-    lastDeploy: '3h ago',
-    location: 'United states',
-    starred: true,
-    active: true,
-  },
-  {
-    name: 'kimos-ui',
-    href: '#',
-    siteHref: '#',
-    repoHref: '#',
-    repo: 'debbielewis/workcation',
-    tech: 'Laravel',
-    lastDeploy: '3h ago',
-    location: 'United states',
-    starred: true,
-    active: true,
-  },
-];
 const activityItems: IActivityItem[] = [
   { id: '1', project: 'Workcation', commit: '2d89f0c8', environment: 'production', time: '1h' },
 ];
 const DashboardPage: React.FC<any> = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const {
+    token,
+    projectLoading,
+    projectsPageSize,
+    projectsPage,
+    projectsTotalElements,
+    projectError,
+    projects,
+  } = useSelector((appState: any) => ({
+    token: appState.authentication.token,
+    projectLoading: appState.project.loading,
+    projectsPage: appState.project.currentPage,
+    projectsPageSize: appState.project.pageSize,
+    projectsTotalElements: appState.project.totalElements,
+    projectError: appState.project.error,
+    projects: appState.project.projects,
+  }));
+  const appDispatch = useAppDispatch();
+  const [isInitialized, setIsInitialized] = React.useState(false);
+  const { danger } = useToast();
   const navigate = useNavigate();
 
+  const handleProjectChangePage = (page: number) => {
+    if (token != null) {
+      appDispatch(getProjectsAction(token, page));
+    }
+  };
+
+  useEffect(() => {
+    if (token != null && !isInitialized) {
+      appDispatch(getProjectsAction(token, projectsPage));
+      setIsInitialized(true);
+    }
+  }, [appDispatch, isInitialized, projectsPage, token]);
+
+  useEffect(() => {
+    if (projectError) {
+      danger('The projects could not be loaded');
+    }
+  }, [danger, projectError]);
+
   const handleRedirectCreateNewProject = () => {
-    navigate('/project/new', { replace: true });
+    navigate('/projects/new', { replace: true });
   };
   return (
     <AppLayout title="Home" showSearchInput={false}>
@@ -45,6 +62,12 @@ const DashboardPage: React.FC<any> = () => {
         <div className="min-w-0 flex-1 bg-white xl:flex">
           <ProjectList
             projects={projects}
+            baseUrlToRedirectElement={'/projects/'}
+            handleChangePage={handleProjectChangePage}
+            pageSize={projectsPageSize}
+            page={projectsPage}
+            totalElements={projectsTotalElements}
+            loading={projectLoading}
             createNewProjectAction={handleRedirectCreateNewProject}
           />
         </div>

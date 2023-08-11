@@ -1,21 +1,17 @@
 import React from 'react';
 import {
   BellIcon,
-  CogIcon,
   CreditCardIcon,
-  KeyIcon,
   SquaresPlusIcon,
   UserCircleIcon,
 } from '@heroicons/react/20/solid';
 import { AppLayout } from '../AppLayout/AppLayout';
 
 const subNavigation = [
-  { name: 'Profile', href: '#', icon: UserCircleIcon, current: false },
-  { name: 'Account', href: '#', icon: CogIcon, current: false },
-  { name: 'Password', href: '#', icon: KeyIcon, current: false },
-  { name: 'Notifications', href: '#', icon: BellIcon, current: false },
-  { name: 'Plan & Billing', href: '#', icon: CreditCardIcon, current: true },
-  { name: 'Integrations', href: '#', icon: SquaresPlusIcon, current: false },
+  { name: 'Profile', href: '/settings/profile', icon: UserCircleIcon, current: false },
+  { name: 'Notifications', href: '/settings/notifications', icon: BellIcon, current: false },
+  { name: 'Plan & Billing', href: '/settings/billing', icon: CreditCardIcon, current: true },
+  { name: 'Integrations', href: '/settings/integrations', icon: SquaresPlusIcon, current: false },
 ];
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ');
@@ -35,7 +31,7 @@ const SettingsLayout: React.FC<SettingsLayoutProps> = ({ children }) => {
                   key={item.name}
                   href={item.href}
                   className={classNames(
-                    item.current
+                    location.pathname.includes(item.href)
                       ? 'bg-gray-50 text-orange-600 hover:bg-white'
                       : 'text-gray-900 hover:bg-gray-50 hover:text-gray-900',
                     'group flex items-center rounded-md px-3 py-2 text-sm font-medium',
@@ -44,7 +40,9 @@ const SettingsLayout: React.FC<SettingsLayoutProps> = ({ children }) => {
                 >
                   <item.icon
                     className={classNames(
-                      item.current ? 'text-orange-500' : 'text-gray-400 group-hover:text-gray-500',
+                      location.pathname.includes(item.href)
+                        ? 'text-orange-500'
+                        : 'text-gray-400 group-hover:text-gray-500',
                       '-ml-1 mr-3 h-6 w-6 flex-shrink-0',
                     )}
                     aria-hidden="true"

@@ -3,11 +3,11 @@
   height: 40px;
 
   &__primary {
-    @apply bg-red-400 hover:bg-red-500;
+    @apply bg-gray-700 hover:bg-gray-800;
   }
 
   &__secondary {
-    @apply bg-white border-red-500 text-red-500 hover:bg-red-400 hover:text-white;
+    @apply bg-white border-gray-700 text-gray-700 hover:bg-gray-800 hover:text-white;
   }
 
   &__tertiary {

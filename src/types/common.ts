@@ -30,6 +30,16 @@ export type IconConfigProps = {
   className?: string;
 };
 
+export type IStep = {
+  id: string;
+  name: string;
+  complete: boolean;
+  active: boolean;
+  // eslint-disable-next-line no-undef
+  child?: JSX.Element;
+  onClickAction: () => void;
+};
+
 export type IActivityItem = {
   id: string;
   project: string;
@@ -38,17 +48,35 @@ export type IActivityItem = {
   time: string;
 };
 
-export type IProject = {
-  name: string;
-  href: string;
-  siteHref: string;
-  repoHref: string;
-  repo: string;
-  tech: string;
-  lastDeploy: string;
-  location: string;
-  starred: boolean;
+export type ILightProject = {
+  id: string;
   active: boolean;
+  createdByUser: string;
+  createdBy: string;
+  createdAt: string;
+  description: string;
+  name: string;
+  organization: string;
+  type: string;
+};
+
+export type IOrganization = {
+  id: string;
+  name: string;
+  description: string;
+};
+
+export type IProjectDetail = {
+  id: string;
+  name: string;
+  status: string;
+  description: string;
+  organization: IOrganization;
+  type: 'ORGANIZATION' | `PERSONAL`;
+  repoProvider: string;
+  jiraConfiguration: string;
+  cicdProvider: string;
+  cloudProvider: string;
 };
 
 export interface IMultiSelectValues {
